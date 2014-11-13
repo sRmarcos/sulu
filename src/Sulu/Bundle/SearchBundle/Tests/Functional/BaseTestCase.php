@@ -58,7 +58,7 @@ class BaseTestCase extends SuluTestCase
         }
     }
 
-    public function indexStructure($title, $url)
+    public function indexStructure($title, $url, $published = true)
     {
         $data = array(
             'title' => $title,
@@ -67,6 +67,6 @@ class BaseTestCase extends SuluTestCase
 
         /** @var ContentMapperInterface $mapper */
         $mapper = $this->getContainer()->get('sulu.content.mapper');
-        $mapper->save($data, 'default', 'sulu_io', 'de', 1, true, null, null, Structure::STATE_PUBLISHED);
+        $mapper->save($data, 'default', 'sulu_io', 'de', 1, true, null, null, $published ? Structure::STATE_PUBLISHED : Structure::STATE_TEST);
     }
 }

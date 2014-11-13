@@ -3,7 +3,8 @@ CHANGELOG for Sulu
 
 * [UNRELEASED]
 
-   * HOTFIX #543 [SearchBundle] Fixed re-index command
+   * HOTFIX  #543 [SearchBundle] Fixed re-index command
+   * FEATURE #--- [SearchBundle] Added functional test for re-index command
 
 * 0.11.0 (2014-11-12)
 
