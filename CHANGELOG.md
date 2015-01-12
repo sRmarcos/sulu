@@ -2,6 +2,8 @@ CHANGELOG for Sulu
 ==================
 
 * dev-develop
+    * BUGFIX      #698 [SecurityBundle] Create user command - do not crash when no roles exist.
+    * ENHANCEMENT #698 [SecurityBundle] Create user/role commands - exit gracefully if user / role already exists
     * FEATURE     #634 [AdminBundle]    Created new configuration component, added new configuration for autocomplete
                                         and refactored usage of autocomplete
     * BUGFIX      #627 [ContentBundle]  Fixed damaged urls when moving/copy/rename
