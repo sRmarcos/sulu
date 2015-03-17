@@ -11,20 +11,15 @@
 namespace DTL\Bundle\ContentBundle\Form\Type\Property;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use DTL\Component\Content\Form\ContentView;
-use DTL\Component\Content\Property\PropertyTypeInterface;
-use DTL\Component\Content\FrontView\FrontView;
-use Symfony\Component\Form\Extension\Core\EventListener\ResizeFormListener;
-use Symfony\Component\OptionsResolver\Options;
+use DTL\Bundle\ContentBundle\Form\DataTransformer\DocumentCollectionToUuidsTransformer;
+use Symfony\Component\Form\FormBuilderInterface;
+use Doctrine\ODM\PHPCR\DocumentManager;
 
 /**
- * Base type for properties
+ * Form type for internal links property type
  */
-class PropertyType extends AbstractType
+class InternalLinksType extends AbstractType
 {
     /**
      * {@inheritDoc}
@@ -32,12 +27,26 @@ class PropertyType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
         $options->setDefaults(array(
-            'compound' => false,
+            'type' => 'document_object',
+            'compound' => true,
+            'allow_add' => true,
+            'allow_delete' => true,
         ));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getName()
     {
-        return 'property';
+        return 'internal_links';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getParent()
+    {
+        return 'collection';
     }
 }

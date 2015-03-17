@@ -11,8 +11,9 @@
 namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Property;
 
 use DTL\Bundle\ContentBundle\Form\Type\Content\ResourceLocatorType;
+use DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\TypeTestCase;
 
-class ResourceLocatorTypeTest extends AbstractPropertyTypeTestCase
+class ResourceLocatorTypeTest extends TypeTestCase
 {
     public function getPropertyAlias()
     {
@@ -23,36 +24,6 @@ class ResourceLocatorTypeTest extends AbstractPropertyTypeTestCase
      * {@inheritDoc}
      */
     public function provideFormView()
-    {
-        return array(
-            array(
-                array(
-                ),
-                array(
-                ),
-            ),
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function provideFrontViewValue()
-    {
-        return array(
-            array(
-                array(
-                ),
-                null,
-                null,
-            ),
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function provideFrontViewAttributes()
     {
         return array(
             array(

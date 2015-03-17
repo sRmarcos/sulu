@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormInterface;
 use DTL\Component\Content\Property\PropertyTypeInterface;
 use DTL\Component\Content\FrontView\FrontView;
 
-class TextAreaType extends AbstractType implements PropertyTypeInterface
+class TextAreaType extends AbstractType
 {
     /**
      * {@inheritDoc}

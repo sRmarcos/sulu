@@ -28,6 +28,7 @@
         <service id="dtl_content.phpcr_odm.serializer.flat" class="%dtl_content.phpcr_odm.serializer.flat.class%">
             <argument type="service" id="dtl_content.structure.factory" />
             <argument type="service" id="dtl_content.phpcr_odm.document_node_helper" />
+            <argument type="service" id="doctrine_phpcr.odm.document_manager" />
         </service>
 
         <service id="dtl_content.phpcr_odm.document_node_helper" class="%dtl_content.phpcr_odm.document_node_helper.class%">

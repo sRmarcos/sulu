@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormInterface;
 use DTL\Component\Content\Property\PropertyTypeInterface;
 use DTL\Component\Content\FrontView\FrontView;
 
-class TextLineType extends AbstractType implements PropertyTypeInterface
+class TextLineType extends AbstractType
 {
     /**
      * {@inheritDoc}
@@ -46,22 +46,6 @@ class TextLineType extends AbstractType implements PropertyTypeInterface
                 return $value;
             }
         ));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
-        $view->vars['placeholder'] = $options['placeholder'];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function buildFrontView(FrontView $view, $data, array $options)
-    {
-        $view->setValue($data);
     }
 
     /**

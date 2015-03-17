@@ -12,26 +12,13 @@ namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Property;
 
 use DTL\Bundle\ContentBundle\Form\Type\Content\TextAreaType;
 use DTL\Bundle\ContentBundle\Form\Type\Content\BlockType;
+use DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\TypeTestCase;
 
-class BlockTypeTest extends AbstractPropertyTypeTestCase
+class BlockTypeTest extends TypeTestCase
 {
     public function getPropertyAlias()
     {
         return 'block';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function provideFormView()
-    {
-        return array(
-            array(
-                $this->getOptions(),
-                array(
-                ),
-            ),
-        );
     }
 
     public function provideFormSubmit()
@@ -52,35 +39,6 @@ class BlockTypeTest extends AbstractPropertyTypeTestCase
                         'title' => 'Foobar',
                         'body' => 'Body body',
                     ),
-                ),
-            ),
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function provideFrontViewValue()
-    {
-        return array(
-            array(
-                $this->getOptions(),
-                array(
-                ),
-                array(),
-            ),
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function provideFrontViewAttributes()
-    {
-        return array(
-            array(
-                $this->getOptions(),
-                array(
                 ),
             ),
         );

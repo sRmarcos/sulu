@@ -8,12 +8,24 @@
             <tag name="form.type" alias="property" />
         </service>
 
-        <service id="dtl_content.form.type.property_collection" class="DTL\Bundle\ContentBundle\Form\Type\Property\PropertyCollectionType">
+        <service id="dtl_content.form.type.property_collection" class="DTL\Bundle\ContentBundle\Form\Type\Base\PropertyCollectionType">
             <tag name="form.type" alias="property_collection" />
         </service>
 
         <service id="dtl_content.form.type.resource_locator" class="DTL\Bundle\ContentBundle\Form\Type\Property\ResourceLocatorType">
             <tag name="form.type" alias="resource_locator" />
+        </service>
+
+        <service id="dtl_content.form.type.color" class="DTL\Bundle\ContentBundle\Form\Type\Property\ColorType">
+            <tag name="form.type" alias="color" />
+        </service>
+
+        <service id="dtl_content.form.type.date" class="DTL\Bundle\ContentBundle\Form\Type\Property\DateType">
+            <tag name="form.type" alias="date" />
+        </service>
+
+        <service id="dtl_content.form.type.internal_links" class="DTL\Bundle\ContentBundle\Form\Type\Property\InternalLinksType">
+            <tag name="form.type" alias="internal_links" />
         </service>
 
         <service id="dtl_content.form.type.text_area" class="DTL\Bundle\ContentBundle\Form\Type\Property\TextAreaType">

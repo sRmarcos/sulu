@@ -17,21 +17,13 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use DTL\Component\Content\Property\PropertyTypeInterface;
 use DTL\Component\Content\FrontView\FrontView;
 
-class ResourceLocatorType extends AbstractType implements PropertyTypeInterface
+class ResourceLocatorType extends AbstractType
 {
     public function setDefaultOptions(OptionsResolverInterface $options)
     {
         $options->setDefaults(array(
             'compound' => false,
         ));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function buildFrontView(FrontView $view, $data, array $options)
-    {
-        $view->setValue($data);
     }
 
     /**

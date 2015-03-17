@@ -19,7 +19,7 @@ use DTL\Component\Content\Form\ContentView;
 use DTL\Component\Content\Property\PropertyTypeInterface;
 use DTL\Component\Content\FrontView\FrontView;
 
-class TextEditorType extends AbstractType implements PropertyTypeInterface
+class TextEditorType extends AbstractType
 {
     /**
      * {@inheritDoc}

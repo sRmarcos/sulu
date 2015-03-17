@@ -20,7 +20,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormEvent;
 use DTL\Component\Content\Property\PropertyTypeInterface;
 
-class BlockType extends AbstractType implements PropertyTypeInterface
+class BlockType extends AbstractType
 {
     const TYPE_KEY = 'type';
 
@@ -109,29 +109,6 @@ class BlockType extends AbstractType implements PropertyTypeInterface
             $prototype = $prototypes[$blockType];
             $form->add($prototype);
         });
-    }
-
-    public function buildFrontView(FrontView $view, $data, array $options)
-    {
-        $defaultType = $options['default_type'];
-        $prototypes = $options['prototypes'];
-        $children = array();
-
-        foreach ($data as $prototypeName => $content) {
-
-            // if the prototype is not defined then it means the user
-            // has removed its definition from the structure resource but the
-            // content repository still has a reference to it. we must allow this.
-            if (!isset($prototypes[$prototypeName])) {
-                continue;
-            }
-
-            $prototype = $prototypes[$prototypeName];
-            $child = $this->frontBuilder->buildFromProperties($prototype['properties'], $content);
-            $children[] = $view;
-        }
-
-        $view->setChildren($children);
     }
 
     /**

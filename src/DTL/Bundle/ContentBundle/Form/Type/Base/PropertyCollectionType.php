@@ -1,6 +1,6 @@
 <?php
 
-namespace DTL\Bundle\ContentBundle\Form\Type\Property;
+namespace DTL\Bundle\ContentBundle\Form\Type\Base;
 
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\Form\AbstractType;
@@ -24,7 +24,7 @@ use DTL\Bundle\ContentBundle\Form\EventListener\ResizeableListener;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class PropertyCollectionType extends AbstractType implements PropertyTypeInterface
+class PropertyCollectionType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -37,8 +37,8 @@ class PropertyCollectionType extends AbstractType implements PropertyTypeInterfa
             'multiple' => function (Options $options) {
                 return $options['min_occurs'] !== $options['max_occurs'];
             },
-                'compound' => true,
-                'options' => array(),
+            'compound' => true,
+            'options' => array(),
         ));
 
         $resolver->setRequired(array(
@@ -52,7 +52,6 @@ class PropertyCollectionType extends AbstractType implements PropertyTypeInterfa
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $prototype = $builder->create($builder->getName(), $options['type'], $options['options']);
-        $builder->setAttribute('prototype', $prototype->getForm());
 
         $resizeListener = new ResizeableListener(
             $options['type'],
@@ -61,23 +60,6 @@ class PropertyCollectionType extends AbstractType implements PropertyTypeInterfa
         );
 
         $builder->addEventSubscriber($resizeListener);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
-    {
-        $view->vars['multiple'] = $options['multiple'];
-        $view->vars['prototype'] = $form->getConfig()->getAttribute('prototype')->createView($view);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function buildFrontView(FrontView $view, $data, array $options)
-    {
-        $view->setValue($data);
     }
 
     /**

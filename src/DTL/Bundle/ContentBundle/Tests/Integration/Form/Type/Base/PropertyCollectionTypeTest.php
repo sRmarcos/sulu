@@ -11,8 +11,9 @@
 namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Property;
 
 use DTL\Bundle\ContentBundle\Form\Type\Content\ResizeableType;
+use DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\TypeTestCase;
 
-class PropertyCollectionTypeTest extends AbstractPropertyTypeTestCase
+class PropertyCollectionTypeTest extends TypeTestCase
 {
     public function getPropertyAlias()
     {

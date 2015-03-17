@@ -11,8 +11,9 @@
 namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Property;
 
 use DTL\Bundle\ContentBundle\Form\Type\Content\TextAreaType;
+use DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\TypeTestCase;
 
-class TextAreaTypeTest extends AbstractPropertyTypeTestCase
+class TextAreaTypeTest extends TypeTestCase
 {
     public function getPropertyAlias()
     {
@@ -43,42 +44,6 @@ class TextAreaTypeTest extends AbstractPropertyTypeTestCase
                         'de' => 'Willkommen',
                         'fr' => 'Bienvenue',
                     ),
-                ),
-            ),
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function provideFrontViewValue()
-    {
-        return array(
-            array(
-                array(
-                ),
-                null,
-                null,
-            ),
-            array(
-                array(
-                ),
-                'This is some text in my area',
-                'This is some text in my area',
-            ),
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function provideFrontViewAttributes()
-    {
-        return array(
-            array(
-                array(
-                ),
-                array(
                 ),
             ),
         );

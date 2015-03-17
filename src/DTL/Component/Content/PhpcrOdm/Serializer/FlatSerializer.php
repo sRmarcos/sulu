@@ -14,6 +14,8 @@ use PHPCR\NodeInterface;
 use DTL\Component\Content\Document\DocumentInterface;
 use DTL\Component\Content\Structure\Factory\StructureFactory;
 use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
+use Doctrine\ODM\PHPCR\DocumentManager;
+
 
 /**
  * Serialize content data into a series of properties in a single node.
@@ -33,14 +35,22 @@ class FlatSerializer implements SerializerInterface
     private $nodeHelper;
 
     /**
+     * @var DocumentManager
+     */
+    private $documentManager;
+
+    /**
      * @param StructureFactory $structureFactory
      */
     public function __construct(
         StructureFactory $structureFactory, 
-        DocumentNodeHelper $nodeHelper)
+        DocumentNodeHelper $nodeHelper,
+        DocumentManager $documentManager
+    )
     {
         $this->structureFactory = $structureFactory;
         $this->nodeHelper = $nodeHelper;
+        $this->documentManager = $documentManager;
     }
 
     /**
@@ -143,7 +153,7 @@ class FlatSerializer implements SerializerInterface
             }
 
             $propName = substr($propName, strlen($prefix . self::ARRAY_DELIM));
-            $flatData[$name . '.' . $propName] = $prop->getValue();
+            $flatData[$name . '.' . $propName] = $this->resolveValue($prop->getValue());
         }
 
         return $flatData;
@@ -168,7 +178,7 @@ class FlatSerializer implements SerializerInterface
             }
 
             $key = implode(self::ARRAY_DELIM, $currentAncestors);
-            $result[$key] = $value;
+            $result[$key] = $this->resolveValue($value);
         }
 
         return $result;
@@ -194,5 +204,20 @@ class FlatSerializer implements SerializerInterface
         $res[$key] = $this->blowUp($keys, $value);
 
         return $res;
+    }
+
+    private function resolveValue($value)
+    {
+        if ($value instanceof DocumentInterface) {
+            return $value->getPhpcrNode();
+        }
+
+        if ($value instanceof NodeInterface) {
+            if ($value->isNodeType('phpcr:managed')) {
+                return $this->documentManager->find(null, $value->getIdentifier());
+            }
+        }
+
+        return $value;
     }
 }
