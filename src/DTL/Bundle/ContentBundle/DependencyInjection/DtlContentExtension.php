@@ -38,6 +38,7 @@ class DtlContentExtension extends Extension
         $loader->load('structure.xml');
         $loader->load('controller.xml');
         $loader->load('property.xml');
+        $loader->load('jms_serializer.xml');
 
         $compat = $config['compat']['enabled'];
         $loader->load('compat.xml');

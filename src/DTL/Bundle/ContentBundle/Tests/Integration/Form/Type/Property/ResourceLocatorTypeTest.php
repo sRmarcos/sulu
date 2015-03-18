@@ -11,7 +11,7 @@
 namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Property;
 
 use DTL\Bundle\ContentBundle\Form\Type\Content\ResourceLocatorType;
-use DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\TypeTestCase;
+use Symfony\Component\Form\Test\TypeTestCase;
 
 class ResourceLocatorTypeTest extends TypeTestCase
 {

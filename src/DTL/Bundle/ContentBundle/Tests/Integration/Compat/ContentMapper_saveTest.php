@@ -58,21 +58,31 @@ class ContentMapper_saveTest extends BaseTestCase
      */
     public function testSaveUpdate()
     {
+        $englishContent = array(
+            'title' => 'This is a test',
+            'url' => '/url/to/content',
+            'name' => 'Daniel Leech',
+            'email' => 'daniel@dantleech.com',
+            'telephone' => '123123',
+        );
+
         $request = ContentMapperRequest::create('page')
             ->setTemplateKey('contact')
             ->setWebspaceKey('sulu_io')
             ->setUserId(1)
             ->setState(StructureInterface::STATE_PUBLISHED)
             ->setLocale('en')
-            ->setData(array(
-                'title' => 'This is a test',
-                'url' => '/url/to/content',
-                'name' => 'Daniel Leech',
-                'email' => 'daniel@dantleech.com',
-                'telephone' => '123123',
-            ));
+            ->setData($englishContent);
 
         $structure = $this->contentMapper->saveRequest($request);
+
+        $frenchContent = array(
+            'title' => 'Ceci est une test',
+            'url' => '/url/to/content',
+            'name' => 'Danièl le Français',
+            'email' => 'daniel@dantleech.com',
+            'telephone' => '123123',
+        );
 
         $request = ContentMapperRequest::create('page')
             ->setTemplateKey('contact')
@@ -81,14 +91,14 @@ class ContentMapper_saveTest extends BaseTestCase
             ->setUserId(1)
             ->setState(StructureInterface::STATE_PUBLISHED)
             ->setLocale('de')
-            ->setData(array(
-                'title' => 'Ceci est une test',
-                'url' => '/url/to/content',
-                'name' => 'Danièl le Français',
-                'email' => 'daniel@dantleech.com',
-                'telephone' => '123123',
-            ));
-        $this->contentMapper->saveRequest($request);
+            ->setData($frenchContent);
+        $structure = $this->contentMapper->saveRequest($request);
+
+        $document = $this->documentManager->findTranslation(null, $structure->getUuid(), 'en');
+        $this->assertEquals($englishContent, $document->getContent());
+
+        $document = $this->documentManager->findTranslation(null, $structure->getUuid(), 'de');
+        $this->assertEquals($frenchContent, $document->getContent());
     }
 
     /**

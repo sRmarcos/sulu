@@ -7,24 +7,14 @@ use Symfony\Component\Form\FormEvent;
 
 class ResizeableListener extends ResizeFormListener
 {
-    private $isMultiple;
-
-    public function __construct($type, array $options = array(), $isMultiple)
+    public function __construct($type, array $options = array())
     {
-        $this->isMultiple = $isMultiple;
-
         parent::__construct($type, $options, true, true, true);
     }
 
     public function preSubmit(FormEvent $event)
     {
         $data = $event->getData();
-
-        if (false === $this->isMultiple) {
-            // inbound value should be converted to array
-            $event->setData(array($data));
-        }
-
         parent::preSubmit($event);
     }
 }

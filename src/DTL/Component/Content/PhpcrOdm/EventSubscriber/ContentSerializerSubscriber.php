@@ -120,6 +120,7 @@ class ContentSerializerSubscriber implements EventSubscriber
         }
 
         $session = $event->getObjectManager()->getPhpcrSession();
+        $unitOfWork = $event->getObjectManager()->getUnitOfWork();
 
         foreach ($this->serializationStack as $document) {
             $this->serializer->serialize($document);

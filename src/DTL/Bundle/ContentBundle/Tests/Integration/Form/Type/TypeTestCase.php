@@ -71,11 +71,12 @@ abstract class TypeTestCase extends BaseTestCase
         }
 
         $this->assertTrue($form->isValid());
-        $this->assertFormSubmitData($expectedData, $content);
+        $this->assertFormSubmitData($expectedData, $content['test_type']);
     }
 
-    protected function assertFormSubmitData($expectedData, \ArrayObject $content)
+    protected function assertFormSubmitData($expectedData, $content)
     {
+        $this->assertEquals($expectedData, $content);
     }
 
     /**

@@ -73,13 +73,17 @@ class StructureFormTypeFactory
         ));
 
         foreach ($structure->getChildren() as $name => $property) {
-            $builder->add($name, 'property_collection', array(
-                'type' => $property->type,
-                'options' => $property->parameters,
-                'label' => $property->title,
-                'min_occurs' => $property->minOccurs,
-                'max_occurs' => $property->maxOccurs,
-            ));
+            if ($property->isMultiple()) {
+                $builder->add($name, 'property_collection', array(
+                    'type' => $property->type,
+                    'options' => $property->parameters,
+                    'label' => $property->title,
+                    'min_occurs' => $property->minOccurs,
+                    'max_occurs' => $property->maxOccurs,
+                ));
+            } else {
+                $builder->add($name, $property->type, $property->parameters);
+            }
         }
 
         return $builder;

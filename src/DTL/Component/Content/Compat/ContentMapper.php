@@ -500,10 +500,16 @@ class ContentMapper implements ContentMapperInterface
 
         $result = array();
         foreach ($locales as $locale) {
+            $ids = array();
             /** @var \Jackalope\Query\Row $row */
             foreach ($queryResult->getRows() as $row) {
                 $ids[] = $row->getPath();
             }
+
+            if (empty($ids)) {
+                continue;
+            }
+
             $documents = $this->documentManager->findMany($ids);
 
             foreach ($documents as $document) {
@@ -537,11 +543,6 @@ class ContentMapper implements ContentMapperInterface
                 }
             }
         }
-
-        throw new \InvalidArgumentException(sprintf(
-            'Fuck fuck fuck fuck fuck %s fuck fuck fuck fuck fuck',
-            'Fuck'
-        ));
 
         return $result;
     }
@@ -587,6 +588,9 @@ class ContentMapper implements ContentMapperInterface
     {
         $collection = array();
         foreach ($documents as $document) {
+            if (!$document instanceof DocumentInterface) {
+                continue;
+            }
             $collection[] = $this->documentToStructure($document);
         }
 

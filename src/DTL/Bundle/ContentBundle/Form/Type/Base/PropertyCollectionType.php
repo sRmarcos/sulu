@@ -11,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use DTL\Component\Content\Property\PropertyTypeInterface;
 use DTL\Component\Content\FrontView\FrontView;
 use DTL\Bundle\ContentBundle\Form\EventListener\ResizeableListener;
+use DTL\Bundle\ContentBundle\Form\DataTransformer\MultipleToSingleTransformer;
 
 /**
  * This type wraps the other content types and makes them resizable.
@@ -55,8 +56,7 @@ class PropertyCollectionType extends AbstractType
 
         $resizeListener = new ResizeableListener(
             $options['type'],
-            $options['options'],
-            $options['multiple']
+            $options['options']
         );
 
         $builder->addEventSubscriber($resizeListener);

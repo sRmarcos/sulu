@@ -21,14 +21,6 @@ class PropertyCollectionTypeTest extends TypeTestCase
     }
 
     /**
-     * This form type is special and does not tak the usual options
-     */
-    protected function completeOptions(array $options)
-    {
-        return $options;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function provideFormView()
@@ -37,7 +29,6 @@ class PropertyCollectionTypeTest extends TypeTestCase
             array(
                 array(
                     'type' => 'text_area',
-                    'options' => parent::completeOptions(array()),
                     'max_occurs' => 1,
                     'max_occurs' => 1,
                 ),
@@ -48,7 +39,6 @@ class PropertyCollectionTypeTest extends TypeTestCase
             array(
                 array(
                     'type' => 'text_area',
-                    'options' => parent::completeOptions(array()),
                     'min_occurs' => 1,
                     'max_occurs' => 2,
                 ),
@@ -68,7 +58,6 @@ class PropertyCollectionTypeTest extends TypeTestCase
             array(
                 array(
                     'type' => 'text_area',
-                    'options' => parent::completeOptions(array()),
                     'min_occurs' => 1,
                     'max_occurs' => 2,
                 ),
@@ -79,7 +68,6 @@ class PropertyCollectionTypeTest extends TypeTestCase
                 // when min and max occurs are both 1, then this is a "single" value
                 array(
                     'type' => 'text_area',
-                    'options' => parent::completeOptions(array()),
                     'min_occurs' => 1,
                     'max_occurs' => 1,
                 ),
@@ -98,7 +86,6 @@ class PropertyCollectionTypeTest extends TypeTestCase
             array(
                 array(
                     'type' => 'text_area',
-                    'options' => parent::completeOptions(array()),
                     'max_occurs' => 1,
                     'max_occurs' => 1,
                 ),
@@ -117,7 +104,6 @@ class PropertyCollectionTypeTest extends TypeTestCase
             array(
                 array(
                     'type' => 'text_area',
-                    'options' => parent::completeOptions(array()),
                     'max_occurs' => 1,
                     'max_occurs' => 1,
                 ),

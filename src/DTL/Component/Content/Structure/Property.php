@@ -72,4 +72,9 @@ class Property extends Item
             $field, get_class($this)
         ));
     }
+
+    public function isMultiple()
+    {
+        return $this->minOccurs !== $this->maxOccurs;
+    }
 }
