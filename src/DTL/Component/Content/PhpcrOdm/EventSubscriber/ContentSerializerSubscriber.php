@@ -103,16 +103,7 @@ class ContentSerializerSubscriber implements EventSubscriber
 
         $documentContent = $document->getContent();
 
-        // TODO: We map the content with the ODM, but we bypass it because it does not
-        //       support nested associative arrays. If we don't map it then the changeset
-        //       will not dispatch the prePersist/preUpdate events.
-        //       Here we set it to empty so that nothing gets persisted, then map the content
-        //       after the request has been saved.
-        //
-        //       See: https://github.com/doctrine/phpcr-odm/issues/417
-        $document->setContent(array());
-
-        $this->serializationStack[] = array($document, $documentContent);
+        $this->serializationStack[] = $document;
     }
 
     /**
@@ -130,13 +121,13 @@ class ContentSerializerSubscriber implements EventSubscriber
 
         $session = $event->getObjectManager()->getPhpcrSession();
 
-        foreach ($this->serializationStack as $documentTuple) {
-            list($document, $content) = $documentTuple;
-            $document->setContent($content);
+        foreach ($this->serializationStack as $document) {
             $this->serializer->serialize($document);
         }
 
         $session->save();
+
+        $this->serializationStack = array();
     }
 
     /**

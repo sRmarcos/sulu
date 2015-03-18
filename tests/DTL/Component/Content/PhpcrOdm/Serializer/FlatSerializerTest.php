@@ -16,17 +16,22 @@ use DTL\Component\Content\Structure\Property;
 use DTL\Component\Content\PhpcrOdm\Serializer\PropertyNameEncoder;
 use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
 use DTL\Component\Content\PhpcrOdm\NamespaceRoleRegistry;
+use DTL\Component\Content\Structure\Factory\StructureFactory;
+use Doctrine\ODM\PHPCR\DocumentManager;
+use PHPCR\NodeInterface;
+use DTL\Component\Content\Document\DocumentInterface;
 
 class FlatSerializerTest extends ProphecyTestCase
 {
     public function setUp()
     {
         parent::setUp();
-        $this->structureFactory = $this->prophesize('DTL\Component\Content\Structure\Factory\StructureFactory');
+        $this->structureFactory = $this->prophesize(StructureFactory::class);
         $this->structure = new Structure();
-        $this->document = $this->prophesize('DTL\Component\Content\Document\DocumentInterface');
+        $this->documentManager = $this->prophesize(DocumentManager::class);
+        $this->document = $this->prophesize(DocumentInterface::class);
         $this->document->getDocumentType()->willReturn('page');
-        $this->node = $this->prophesize('PHPCR\NodeInterface');
+        $this->node = $this->prophesize(NodeInterface::class);
         $this->helper = new DocumentNodeHelper(new NamespaceRoleRegistry(array(
             'localized-content' => 'i18n',
             'content' => 'cont',
@@ -38,7 +43,8 @@ class FlatSerializerTest extends ProphecyTestCase
 
         $this->serializer = new FlatSerializer(
             $this->structureFactory->reveal(),
-            $this->helper
+            $this->helper,
+            $this->documentManager->reveal()
         );
     }
 

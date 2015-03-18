@@ -104,6 +104,11 @@ abstract class Document implements DocumentInterface
     protected $content = array();
 
     /**
+     * @var string Hash of the content
+     */
+    protected $contentHash = array();
+
+    /**
      * @var DocumentNodeHelper
      */
     protected $documentNodeHelper;
@@ -318,6 +323,7 @@ abstract class Document implements DocumentInterface
     public function setContent($content)
     {
         $this->content = $content;
+        $this->contentHash = uniqid();
     }
 
     /**
