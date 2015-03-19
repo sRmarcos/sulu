@@ -240,6 +240,7 @@ class ContentMapper implements ContentMapperInterface
         $document = $this->getContentDocument($webspaceKey, $locale);
         $structure = $this->documentToStructure($document);
 
+
         return $structure;
     }
 
@@ -296,6 +297,13 @@ class ContentMapper implements ContentMapperInterface
         }
 
         return $structures;
+    }
+
+    public function loadByIds(array $ids, $locale)
+    {
+        return $this->documentsToStructureCollection(
+            $this->documentManager->findMany(null, $ids, $locale)
+        );
     }
 
     /**
@@ -647,7 +655,7 @@ class ContentMapper implements ContentMapperInterface
         return $document;
     }
 
-    private function loadCollectionByDocuments($documents, $locale, $options)
+    public function loadCollectionByDocuments($documents, $locale, $options)
     {
         $collection = array();
         foreach ($documents as $document) {
@@ -657,7 +665,7 @@ class ContentMapper implements ContentMapperInterface
         return $collection;
     }
 
-    private function loadByDocument(DocumentInterface $document, $locale, $options)
+    public function loadByDocument(DocumentInterface $document, $locale, $options)
     {
         $options = array_merge(array(
             'load_ghost_content' => false,

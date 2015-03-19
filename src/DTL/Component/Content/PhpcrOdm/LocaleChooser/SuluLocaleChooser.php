@@ -39,8 +39,6 @@ class SuluLocaleChooser implements LocaleChooserInterface
     }
 
     /**
-     * TODO: We hack the requested locale into the Document here. This should be set from an
-     * event listener, see: https://github.com/doctrine/phpcr-odm/issues/608
      * {@inheritDoc}
      */
     public function getFallbackLocales($document, ClassMetadata $metadata, $forLocale = null)
@@ -53,12 +51,16 @@ class SuluLocaleChooser implements LocaleChooserInterface
         }
 
         $document->setRequestedLocale($forLocale);
-
         if (null === $document->getPhpcrNode()) {
             return array();
         }
 
-        return $this->doGetFallbackLocales($document, $metadata, $forLocale);
+        if (null === $forLocale) {
+            throw new \InvalidArgumentException('Fa');
+        }
+
+        $res = $this->doGetFallbackLocales($document, $metadata, $forLocale);
+        return $res;
     }
 
     /**
@@ -88,7 +90,7 @@ class SuluLocaleChooser implements LocaleChooserInterface
         $locales = array_merge(
             $this->getParentLocalizations($localization),
             $this->getChildLocalizations($localization),
-            $document->getLocales()
+            $this->documentNodeHelper->getLocales($document->getPhpcrNode())
         );
 
         $locales = array_filter($locales, function ($locale) use ($forLocale) {
@@ -102,7 +104,7 @@ class SuluLocaleChooser implements LocaleChooserInterface
 
     private function getOtherLocales(DocumentInterface $document, $forLocale)
     {
-        $locales = $document->getLocales();
+        $locales = $this->documentNodeHelper->getLocales($document->getPhpcrNode());
         return array_filter($locales, function ($locale) use ($forLocale) {
             return $locale !== $forLocale;
         });
