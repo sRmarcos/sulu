@@ -43,6 +43,8 @@ class StructureBridgeToArrayTest extends BaseTestCase
             'nodeState' => 2,
             'originTemplate' => 'overview',
             'published' => $startDocument->getPublished(),
+            'publishedState' => true,
+            'navContexts' => array(),
             'linked' => null,
         );
 

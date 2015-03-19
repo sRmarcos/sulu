@@ -94,6 +94,9 @@ class ContentMapper_saveTest extends BaseTestCase
             ->setData($frenchContent);
         $structure = $this->contentMapper->saveRequest($request);
 
+        unset($englishContent['title'], $englishContent['url']);
+        unset($frenchContent['title'], $frenchContent['url']);
+
         $document = $this->documentManager->findTranslation(null, $structure->getUuid(), 'en');
         $this->assertEquals($englishContent, $document->getContent());
 

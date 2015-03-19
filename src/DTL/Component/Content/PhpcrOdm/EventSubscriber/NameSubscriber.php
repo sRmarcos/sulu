@@ -19,7 +19,6 @@ use DTL\Component\Content\PhpcrOdm\EventSubscriber\Marker\AutoNameMarker;
  * locale.
  *
  * TODO: This class should use the primary locale, current it changes
- *       the node name each time a specific locale is persisted.
  */
 class NameSubscriber implements EventSubscriber
 {

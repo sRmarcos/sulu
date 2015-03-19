@@ -45,6 +45,10 @@ class BlockType extends AbstractType
             'prototypes' => 'array',
         ));
 
+        $options->setDefaults(array(
+            'compound' => true,
+        ));
+
         $options->setNormalizer('prototypes', function ($options, $prototypes) {
             $normalizedPrototypes = array();
 

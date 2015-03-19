@@ -106,7 +106,7 @@ abstract class Document implements DocumentInterface
     /**
      * @var string Hash of the content
      */
-    protected $contentHash = array();
+    protected $contentHash = '_';
 
     /**
      * @var DocumentNodeHelper

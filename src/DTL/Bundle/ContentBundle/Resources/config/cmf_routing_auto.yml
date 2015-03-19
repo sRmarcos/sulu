@@ -5,6 +5,6 @@ DTL\Bundle\ContentBundle\Document\HomepageDocument:
 DTL\Bundle\ContentBundle\Document\PageDocument:
     uri_schema: "{resource_locator}/{title}"
     token_providers:
-        resource_locator: [content_method, { method: getResourceLocator, slugify: false  }]
+        resource_locator: [content_method, { method: getResourceLocator, collapse_empty: true, slugify: false  }]
         title: [content_method, { method: getTitle }]
     conflict_resolver: auto_increment

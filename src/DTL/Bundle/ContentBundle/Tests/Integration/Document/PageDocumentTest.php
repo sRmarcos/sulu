@@ -194,7 +194,7 @@ class PageDocumentTest extends SuluTestCase
 
     public function testGetEnabledShadowLocales()
     {
-        $page = $this->createLocalizedPage('de', array('en', 'fr'));
+        $page = $this->createLocalizedShadowPages('de', array('en', 'fr'));
         $result = $page->getShadowLocales();
 
         $this->assertEquals(array(
@@ -204,7 +204,7 @@ class PageDocumentTest extends SuluTestCase
 
     public function testGetRealLocales()
     {
-        $page = $this->createLocalizedPage('de', array('en', 'fr'));
+        $page = $this->createLocalizedShadowPages('de', array('en', 'fr'));
         $result = $page->getRealLocales();
 
         $this->assertEquals(array(
@@ -235,17 +235,17 @@ class PageDocumentTest extends SuluTestCase
      */
     public function testGetLocalizationState($requestedLocale, $locale, $shadowLocales, $expectedState)
     {
-        $page = $this->createLocalizedPage($locale, $shadowLocales, $requestedLocale);
+        $page = $this->createLocalizedShadowPages($locale, $shadowLocales, $requestedLocale);
         $this->assertEquals($expectedState, $page->getLocalizationState());
     }
 
     public function testGetLocalizationStateDefault()
     {
-        $page = $this->createLocalizedPage('de', array());
+        $page = $this->createLocalizedShadowPages('de', array());
         $this->assertEquals(LocalizationState::AUTO, $page->getLocalizationState());
     }
 
-    private function createLocalizedPage($locale, array $shadowLocales, $loadInLocale = null)
+    private function createLocalizedShadowPages($locale, array $shadowLocales, $loadInLocale = null)
     {
         $page = new PageDocument();
         $page->setTitle('Hello');

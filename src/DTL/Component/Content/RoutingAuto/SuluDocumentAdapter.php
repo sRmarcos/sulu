@@ -73,6 +73,8 @@ class SuluDocumentAdapter extends PhpcrOdmAdapter
         $uri = $uriContext->getUri();
         $parentDocument = $this->documentManager->find(null, $path);
 
+        // if we couldn't find the locale node, try getting the parent node (e.g. contents/).
+        // The locale node will then be created automatically.
         if (null === $parentDocument) {
             $parentDocument = $this->documentManager->find(null, PathHelper::getParentPath($path));
             $uri = '/' . $uriContext->getLocale() . $uri;

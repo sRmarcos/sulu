@@ -38,6 +38,11 @@ class ContentSerializerSubscriber implements EventSubscriber
     private $serializationStack = array();
 
     /**
+     * @var array
+     */
+    private $boundTranslations = array();
+
+    /**
      * {@inheritDoc}
      */
     public function getSubscribedEvents()
@@ -46,8 +51,9 @@ class ContentSerializerSubscriber implements EventSubscriber
             Event::postLoad,
             Event::prePersist,
             Event::preUpdate,
-            Event::onFlush,
             Event::endFlush,
+            Event::postLoadTranslation,
+            Event::preBindTranslation,
         );
     }
 
@@ -59,11 +65,6 @@ class ContentSerializerSubscriber implements EventSubscriber
     {
         $this->serializer = $serializer;
         $this->documentManager = $documentManager;
-    }
-
-    public function onFlush(ManagerEventArgs $event)
-    {
-        $unitOfWork = $event->getObjectManager()->getUnitOfWork();
     }
 
     /**
@@ -81,6 +82,43 @@ class ContentSerializerSubscriber implements EventSubscriber
 
         $data = $this->serializer->deserialize($document);
         $document->setContent($data);
+    }
+
+    public function postLoadTranslation(LifecycleEventArgs $event)
+    {
+        $document = $event->getObject();
+
+        if (false === $this->isDocument($document)) {
+            return;
+        }
+
+        if (!$document->getPhpcrNode()) {
+            return;
+        }
+
+        $oid = spl_object_hash($document);
+
+        if (isset($this->boundTranslations[$oid][$document->getLocale()])) {
+            $content = $this->boundTranslations[$oid][$document->getLocale()];
+            $document->setContent($content);
+            return;
+        }
+
+        $this->postLoad($event);
+    }
+
+    public function preBindTranslation(LifecycleEventArgs $event)
+    {
+        $document = $event->getObject();
+        if (false === $this->isDocument($document)) {
+            return;
+        }
+
+        $unitOfWork = $event->getObjectManager()->getUnitOfWork();
+
+        $oid = spl_object_hash($document);
+        $currentLocale = $unitOfWork->getCurrentLocale($document);
+        $this->boundTranslations[$oid][$currentLocale] = $document->getContent();
     }
 
     public function preUpdate(LifecycleEventArgs $event)
@@ -101,8 +139,6 @@ class ContentSerializerSubscriber implements EventSubscriber
             return;
         }
 
-        $documentContent = $document->getContent();
-
         $this->serializationStack[] = $document;
     }
 
@@ -120,7 +156,6 @@ class ContentSerializerSubscriber implements EventSubscriber
         }
 
         $session = $event->getObjectManager()->getPhpcrSession();
-        $unitOfWork = $event->getObjectManager()->getUnitOfWork();
 
         foreach ($this->serializationStack as $document) {
             $this->serializer->serialize($document);

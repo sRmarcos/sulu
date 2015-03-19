@@ -64,16 +64,6 @@ class PropertyCollectionTypeTest extends TypeTestCase
                 array('hello'),
                 array('hello'),
             ),
-            array(
-                // when min and max occurs are both 1, then this is a "single" value
-                array(
-                    'type' => 'text_area',
-                    'min_occurs' => 1,
-                    'max_occurs' => 1,
-                ),
-                'hello',
-                'hello',
-            )
         );
     }
 

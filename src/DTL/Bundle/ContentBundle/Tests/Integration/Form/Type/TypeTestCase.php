@@ -58,6 +58,7 @@ abstract class TypeTestCase extends BaseTestCase
      */
     public function testFormSubmit($options, $data, $expectedData)
     {
+        $data = $this->prepareFormSubmitData($data);
         $content = new \ArrayObject();
         $form = $this->createForm($options);
         $form->setData($content);
@@ -72,6 +73,11 @@ abstract class TypeTestCase extends BaseTestCase
 
         $this->assertTrue($form->isValid());
         $this->assertFormSubmitData($expectedData, $content['test_type']);
+    }
+
+    protected function prepareFormSubmitData($data)
+    {
+        return $data;
     }
 
     protected function assertFormSubmitData($expectedData, $content)

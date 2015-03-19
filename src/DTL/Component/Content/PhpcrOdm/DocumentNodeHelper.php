@@ -38,7 +38,7 @@ class DocumentNodeHelper
      */
     public function getEnabledShadowLocales(NodeInterface $node)
     {
-        $properties = $this->getLocalizedProperties($node, 'shadow_on', 'localized-system');
+        $properties = $this->getLocalizedProperties($node, 'shadow-on', 'localized-system');
         $properties = array_filter($properties, function ($property) {
             return $property->getValue();
         });

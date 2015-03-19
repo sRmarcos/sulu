@@ -40,6 +40,8 @@ class PropertyCollectionType extends AbstractType
             },
             'compound' => true,
             'options' => array(),
+            'allow_add' => true,
+            'allow_delete' => true,
         ));
 
         $resolver->setRequired(array(
@@ -50,23 +52,13 @@ class PropertyCollectionType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $prototype = $builder->create($builder->getName(), $options['type'], $options['options']);
-
-        $resizeListener = new ResizeableListener(
-            $options['type'],
-            $options['options']
-        );
-
-        $builder->addEventSubscriber($resizeListener);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'property_collection';
+    }
+
+    public function getParent()
+    {
+        return 'collection';
     }
 }

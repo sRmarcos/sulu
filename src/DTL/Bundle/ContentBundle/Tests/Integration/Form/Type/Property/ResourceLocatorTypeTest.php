@@ -11,27 +11,12 @@
 namespace DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\Property;
 
 use DTL\Bundle\ContentBundle\Form\Type\Content\ResourceLocatorType;
-use Symfony\Component\Form\Test\TypeTestCase;
+use DTL\Bundle\ContentBundle\Tests\Integration\Form\Type\TypeTestCase;
 
 class ResourceLocatorTypeTest extends TypeTestCase
 {
     public function getPropertyAlias()
     {
         return 'resource_locator';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function provideFormView()
-    {
-        return array(
-            array(
-                array(
-                ),
-                array(
-                ),
-            ),
-        );
     }
 }
