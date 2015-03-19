@@ -236,6 +236,7 @@ class PageDocumentTest extends SuluTestCase
     public function testGetLocalizationState($requestedLocale, $locale, $shadowLocales, $expectedState)
     {
         $page = $this->createLocalizedShadowPages($locale, $shadowLocales, $requestedLocale);
+        $page = $this->manager->find(null, $page->getUuid());
         $this->assertEquals($expectedState, $page->getLocalizationState());
     }
 

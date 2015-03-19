@@ -19,6 +19,7 @@ use Sulu\Component\Webspace\Manager\WebspaceManagerInterface;
 use Sulu\Component\Webspace\Analyzer\RequestAnalyzerInterface;
 use Sulu\Component\Localization\Localization;
 use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
+use PHPCR\NodeInterface;
 
 class SuluLocaleChooserTest extends ProphecyTestCase
 {
@@ -31,6 +32,7 @@ class SuluLocaleChooserTest extends ProphecyTestCase
         $this->document = $this->prophesize(DocumentInterface::class);
         $this->classMetadata = $this->prophesize(ClassMetadata::class);
         $this->documentNodeHelper = $this->prophesize(DocumentNodeHelper::class);
+        $this->node = $this->prophesize(NodeInterface::class);
 
         $this->chooser = new SuluLocaleChooser(
             $this->requestAnalyzer->reveal(),
@@ -42,8 +44,10 @@ class SuluLocaleChooserTest extends ProphecyTestCase
 
     public function testNoWebspace()
     {
+        $this->document->getPhpcrNode()->willReturn($this->node->reveal());
         $this->requestAnalyzer->getWebspace()->willReturn(null);
         $this->document->getLocales()->willReturn(array('fr', 'en', 'de'));
+        $this->document->setRequestedLocale('de')->shouldBeCalled();
         $locales = $this->chooser->getFallbackLocales(
             $this->document->reveal(),
             $this->classMetadata->reveal(),
@@ -57,6 +61,8 @@ class SuluLocaleChooserTest extends ProphecyTestCase
     {
         $forLocale = 'de';
 
+        $this->document->setRequestedLocale('de')->shouldBeCalled();
+        $this->document->getPhpcrNode()->willReturn($this->node->reveal());
         $this->requestAnalyzer->getWebspace()->willReturn($this->webspace->reveal());
         $webspaceLocalization = $this->createLocalization('de_at');
         $parentLocalization = $this->createLocalization('de', true);

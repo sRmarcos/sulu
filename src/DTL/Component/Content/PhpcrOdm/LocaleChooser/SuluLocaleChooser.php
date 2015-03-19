@@ -39,6 +39,8 @@ class SuluLocaleChooser implements LocaleChooserInterface
     }
 
     /**
+     * TODO: We hack the requested locale into the Document here. This should be set from an
+     * event listener, see: https://github.com/doctrine/phpcr-odm/issues/608
      * {@inheritDoc}
      */
     public function getFallbackLocales($document, ClassMetadata $metadata, $forLocale = null)
@@ -50,12 +52,11 @@ class SuluLocaleChooser implements LocaleChooserInterface
             ));
         }
 
+        $document->setRequestedLocale($forLocale);
+
         if (null === $document->getPhpcrNode()) {
-            $document->setRequestedLocale($forLocale);
             return array();
         }
-
-        $this->setRequestedLocale($document, $forLocale);
 
         return $this->doGetFallbackLocales($document, $metadata, $forLocale);
     }
@@ -74,15 +75,6 @@ class SuluLocaleChooser implements LocaleChooserInterface
         return $currentLocalization->getLocalization();
     }
 
-    private function setRequestedLocale($document, $forLocale)
-    {
-        $locales = $this->documentNodeHelper->getLocales($document->getPhpcrNode());
-
-        if (false === in_array($forLocale, $locales)) {
-            $document->setRequestedLocale($forLocale);
-        }
-    }
-
     private function doGetFallbackLocales($document, ClassMetadata $metadata, $forLocale = null)
     {
         $webspace = $this->requestAnalyzer->getWebspace();
@@ -96,7 +88,7 @@ class SuluLocaleChooser implements LocaleChooserInterface
         $locales = array_merge(
             $this->getParentLocalizations($localization),
             $this->getChildLocalizations($localization),
-            $this->documentNodeHelper->getLocales($document->getPhpcrNode())
+            $document->getLocales()
         );
 
         $locales = array_filter($locales, function ($locale) use ($forLocale) {
@@ -110,7 +102,7 @@ class SuluLocaleChooser implements LocaleChooserInterface
 
     private function getOtherLocales(DocumentInterface $document, $forLocale)
     {
-        $locales = $this->documentNodeHelper->getLocales($document->getPhpcrNode());
+        $locales = $document->getLocales();
         return array_filter($locales, function ($locale) use ($forLocale) {
             return $locale !== $forLocale;
         });

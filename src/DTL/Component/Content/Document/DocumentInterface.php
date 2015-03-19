@@ -88,6 +88,17 @@ interface DocumentInterface
      */
     public function setLocale($locale);
 
+    /** 
+     * The requested locale. The requested locale is the locale that was
+     * requested by the user, not the actually loaded locale.
+     *
+     * This information should only be used to determine the localization
+     * state.
+     *
+     * @param string
+     */
+    public function setRequestedLocale($locale);
+
     /**
      * Return the structure type
      *

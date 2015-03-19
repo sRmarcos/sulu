@@ -41,6 +41,10 @@ class DataNormalizerTest extends \PHPUnit_Framework_TestCase
                         'car' => 'skoda',
                         'duck' => 'quack',
                     ),
+                    'redirectTarget' => null,
+                    'redirectExternal' => null,
+                    'shadowLocaleEnabled' => false,
+                    'shadowLocale' => null,
                 ),
             ),
         );
