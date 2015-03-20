@@ -62,7 +62,7 @@ class FlatSerializer implements SerializerInterface
         $data = $document->getContent();
         $type = $document->getStructureType();
 
-        $structure = $this->structureFactory->getStructure($document->getDocumentType(), $type);
+        $structure = $this->structureFactory->getStructure($document->getDocumentType(), $type, true);
 
         $localizedProps = array();
         $nonLocalizedProps = array();
@@ -99,7 +99,7 @@ class FlatSerializer implements SerializerInterface
         $node = $document->getPhpcrNode();
         $type = $document->getStructureType();
 
-        $structure = $this->structureFactory->getStructure($document->getDocumentType(), $type);
+        $structure = $this->structureFactory->getStructure($document->getDocumentType(), $type, true);
 
         $nodeProperties = $node->getProperties();
         $flatData = array();

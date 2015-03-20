@@ -13,4 +13,10 @@ namespace DTL\Component\Content\Structure;
 
 class Section extends Item
 {
+    /**
+     * The number of grid columns the property should use in the admin interface
+     *
+     * @var integer
+     */
+    public $colSpan = null;
 }

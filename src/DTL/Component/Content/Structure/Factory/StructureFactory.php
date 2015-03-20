@@ -59,7 +59,7 @@ class StructureFactory implements StructureFactoryInterface
     /**
      * {@inheritDoc}
      */
-    public function getStructure($type, $structureType)
+    public function getStructure($type, $structureType, $asModel = false)
     {
         if (!isset($this->typePaths[$type])) {
             throw new Exception\DocumentTypeNotFoundException(sprintf(
@@ -103,7 +103,13 @@ class StructureFactory implements StructureFactoryInterface
 
         require($cachePath);
 
-        return unserialize($metadata);
+        $structure = unserialize($metadata);
+
+        if ($asModel) {
+            return $structure->transformToModel();
+        }
+
+        return $structure;
     }
 
     /**

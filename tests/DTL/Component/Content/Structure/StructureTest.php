@@ -3,6 +3,7 @@
 namespace DTL\Component\Content\Structure;
 
 use DTL\Component\Content\Structure\ItemTest;
+use DTL\Component\Content\Structure\Structure;
 
 class StructureTest extends ItemTest
 {
@@ -42,5 +43,18 @@ class StructureTest extends ItemTest
             'prop_3' => $this->prop3,
             'prop_4' => $this->prop4,
         ), $properties);
+    }
+
+    public function testTransformToModel()
+    {
+        $result = $this->structure->transformToModel();
+        $this->assertInstanceOf(Structure::class, $result);
+        $this->assertNotSame($result, $this->structure);
+        $this->assertEquals(array(
+            'prop_1_localized' => $this->prop1,
+            'prop_2' => $this->prop2,
+            'prop_3' => $this->prop3,
+            'prop_4' => $this->prop4,
+        ), $result->children);
     }
 }

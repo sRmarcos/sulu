@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+
+    <key>section</key>
+
+    <view>ClientWebsiteBundle:templates:default</view>
+    <controller>SuluWebsiteBundle:Default:index</controller>
+    <cacheLifetime>2400</cacheLifetime>
+
+    <meta>
+        <title lang="de">Section</title>
+        <title lang="en">Section</title>
+    </meta>
+
+    <properties>
+        <property name="color" type="text_line" mandatory="true" />
+        <section name="section_one">
+            <properties>
+                <property name="checkbox" type="text_line" mandatory="true">
+                    <meta>
+                        <title lang="de">Checkbox</title>
+                        <title lang="en">Checkbox</title>
+                    </meta>
+                </property>
+
+                <property name="date" type="text_line" mandatory="true">
+                    <meta>
+                        <title lang="de">Date</title>
+                        <title lang="en">Date</title>
+                    </meta>
+                </property>
+            </properties>
+        </section>
+
+    </properties>
+</template>
+

@@ -77,6 +77,22 @@ class StructureFactoryTest extends ProphecyTestCase
         $this->factory->getStructure('page', 'something');
     }
 
+    /**
+     * It can return a model representation
+     */
+    public function testGetStructureAsModel()
+    {
+        $modelRepresentation = new \stdClass;
+        $this->loader->load($this->mappingFile)->willReturn($this->structure->reveal());
+        $this->structure->transformToModel()->willReturn($modelRepresentation);
+
+        $structure = $this->factory->getStructure('page', 'something', true);
+        $this->assertEquals($modelRepresentation, $structure);
+    }
+
+    /**
+     * It returns all structures that are available
+     */
     public function testGetStructures()
     {
         $this->loader->load($this->mappingFile)->willReturn($this->structure->reveal());

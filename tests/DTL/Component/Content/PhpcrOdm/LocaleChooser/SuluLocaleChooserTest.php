@@ -46,7 +46,7 @@ class SuluLocaleChooserTest extends ProphecyTestCase
     {
         $this->document->getPhpcrNode()->willReturn($this->node->reveal());
         $this->requestAnalyzer->getWebspace()->willReturn(null);
-        $this->document->getLocales()->willReturn(array('fr', 'en', 'de'));
+        $this->documentNodeHelper->getLocales($this->node->reveal())->willReturn(array('fr', 'en', 'de'));
         $this->document->setRequestedLocale('de')->shouldBeCalled();
         $locales = $this->chooser->getFallbackLocales(
             $this->document->reveal(),
@@ -73,7 +73,7 @@ class SuluLocaleChooserTest extends ProphecyTestCase
             $childLocalization1,
             $childLocalization2,
         ));
-        $this->document->getLocales()->willReturn(array('de_at', 'de', 'en', 'jp'));
+        $this->documentNodeHelper->getLocales($this->node->reveal())->willReturn(array('fr', 'en', 'de', 'jp'));
 
         $this->webspace->getLocalization($forLocale)->willReturn($webspaceLocalization->reveal());
 

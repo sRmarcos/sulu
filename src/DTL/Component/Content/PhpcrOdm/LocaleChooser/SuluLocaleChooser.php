@@ -51,12 +51,9 @@ class SuluLocaleChooser implements LocaleChooserInterface
         }
 
         $document->setRequestedLocale($forLocale);
+
         if (null === $document->getPhpcrNode()) {
             return array();
-        }
-
-        if (null === $forLocale) {
-            throw new \InvalidArgumentException('Fa');
         }
 
         $res = $this->doGetFallbackLocales($document, $metadata, $forLocale);
@@ -85,12 +82,18 @@ class SuluLocaleChooser implements LocaleChooserInterface
             return $this->getOtherLocales($document, $forLocale);
         }
 
+        $documentLocalizations = $this->documentNodeHelper->getLocales($document->getPhpcrNode());
+
         $localization = $webspace->getLocalization($forLocale);
+
+        if (null === $localization) {
+            return $documentLocalizations;
+        }
 
         $locales = array_merge(
             $this->getParentLocalizations($localization),
             $this->getChildLocalizations($localization),
-            $this->documentNodeHelper->getLocales($document->getPhpcrNode())
+            $documentLocalizations
         );
 
         $locales = array_filter($locales, function ($locale) use ($forLocale) {

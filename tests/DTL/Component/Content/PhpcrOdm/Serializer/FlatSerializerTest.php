@@ -37,7 +37,7 @@ class FlatSerializerTest extends ProphecyTestCase
             'content' => 'cont',
         )));
 
-        $this->structureFactory->getStructure('page', 'test')->willReturn(
+        $this->structureFactory->getStructure('page', 'test', true)->willReturn(
             $this->structure
         );
 

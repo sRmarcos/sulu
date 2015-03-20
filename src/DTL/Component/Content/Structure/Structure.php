@@ -23,19 +23,6 @@ class Structure extends Item
      */
     public $resource;
 
-    public function __set($field, $value)
-    {
-        throw new \InvalidArgumentException(sprintf(
-            'Property "%s" does not exist on "%s"',
-            $field, get_class($this)
-        ));
-    }
-
-    protected function getItem()
-    {
-        return new Structure('foobar');
-    }
-
     /**
      * Return all direct child properties of this structure, ignoring
      * Sections
@@ -55,6 +42,20 @@ class Structure extends Item
         }
 
         return $properties;
+    }
+
+    /**
+     * Returns a model representation of this structure - the structure
+     * without presentation elements: without Sections.
+     *
+     * @return Structure
+     */
+    public function transformToModel()
+    {
+       $structure = clone $this;
+        $structure->children = $this->getProperties();
+
+        return $structure;
     }
 
     /**

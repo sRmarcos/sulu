@@ -66,7 +66,7 @@ class StructureFormTypeFactory
      */
     public function createBuilder($documentType, $structureType, array $options)
     {
-        $structure = $this->structureFactory->getStructure($documentType, $structureType);
+        $structure = $this->structureFactory->getStructure($documentType, $structureType, true);
 
         $builder = $this->formFactory->createNamedBuilder('content', 'form', null, array(
             'auto_initialize' => false, // auto initialize should only be for root nodes

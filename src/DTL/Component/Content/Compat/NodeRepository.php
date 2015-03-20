@@ -8,6 +8,9 @@ use Doctrine\ODM\PHPCR\DocumentManager;
 use DTL\Component\Content\Compat\ContentMapper;
 use Sulu\Component\Content\Mapper\ContentMapperRequest;
 
+/**
+ * TODO: Favour extension over composition.
+ */
 class NodeRepository implements NodeRepositoryInterface
 {
     /**

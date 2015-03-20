@@ -49,8 +49,6 @@ class Item
      * e.g.
      *
      * {
-     *     colspan: 6
-     *     css_class: green-giant
      *     placeholder: Enter some text
      * }
      *

@@ -17,6 +17,8 @@ use DTL\Component\Content\Document\DocumentInterface;
 use DTL\Component\Content\Document\LocalizationState;
 use DTL\Component\Content\Document\WorkflowState;
 use Sulu\Component\Content\StructureType;
+use DTL\Component\Content\Structure\Item;
+use DTL\Component\Content\Structure\Section;
 
 class StructureBridge implements StructureInterface
 {
@@ -182,7 +184,7 @@ class StructureBridge implements StructureInterface
     {
         $property = $this->structure->getChild($name);
 
-        $propertyBridge = $this->createBridgeFromProperty($name, $property);
+        $propertyBridge = $this->createBridgeFromItem($name, $property);
 
         return $propertyBridge;
     }
@@ -516,7 +518,7 @@ class StructureBridge implements StructureInterface
         $this->notImplemented(__METHOD__);
     }
 
-    private function getSectionProperty($name, NewProperty $property)
+    private function getSectionProperty($name, Section $property)
     {
         $sectionProperty = new SectionProperty(
             $name,
@@ -528,7 +530,7 @@ class StructureBridge implements StructureInterface
         );
 
         foreach ($property->children as $childName => $child) {
-            $sectionProperty->addChild($this->createBridgeFromProperty($childName, $child));
+            $sectionProperty->addChild($this->createBridgeFromItem($childName, $child));
         }
 
         return $sectionProperty;
@@ -564,9 +566,9 @@ class StructureBridge implements StructureInterface
         return $blockProperty;
     }
 
-    private function createBridgeFromProperty($name, NewProperty $property)
+    private function createBridgeFromItem($name, Item $property)
     {
-        if ($property->type === 'section') {
+        if ($property instanceof Section) {
             return $this->getSectionProperty($name, $property);
         }
 
