@@ -13,6 +13,7 @@
         <field name="shadowLocale" property="shadow-locale" type="string" nullable="true" translated="true"/>
         <field name="redirectType" property="redirect-type" type="string" nullable="true" translated="true"/>
         <field name="redirectExternal" property="redirect-external" type="string" nullable="true" translated="true"/>
+        <field name="resourceSegment" property="res-seg" type="string" translated="true" nullable="true" />
         <reference-one name="redirectTarget" property="nsys:redirect-target" translated="true"/>
     </mapped-superclass>
 

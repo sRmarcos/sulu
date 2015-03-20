@@ -39,14 +39,14 @@ class SuluDocumentAdapterTest extends SuluTestCase
     {
         return array(
             array(
-                '/',
-                'This is a base document',
-                '/this-is-a-base-document',
+                'de',
+                array('this-is-a-base-document'),
+                '/de/this-is-a-base-document',
             ),
             array(
-                '/resource/locator',
-                'This is my title',
-                '/resource/locator/this-is-my-title',
+                'de',
+                array('resource/locator', 'this-is-my-title'),
+                '/de/resource/locator/this-is-my-title',
             ),
         );
     }
@@ -54,29 +54,29 @@ class SuluDocumentAdapterTest extends SuluTestCase
     /**
      * @dataProvider provideAdapter
      */
-    public function testAdapter($resourceLocator, $title, $expectedUrl)
+    public function testAdapter($locale, $segments, $expectedUrl)
     {
-        $uriContext = $this->createUriContexts($resourceLocator, $title);
+        $uriContext = $this->createUriContexts($locale, $segments);
         $this->assertEquals($expectedUrl, $uriContext->getUri());
     }
 
-    public function testRedirect()
+    private function createUriContexts($locale, $segments)
     {
-        $this->createUriContexts('/this', 'Foo bar');
-        $this->createUriContexts('/this-is-new', 'Foo bar');
-    }
+        $parent = $this->parent;
 
-    private function createUriContexts($resourceLocator, $title)
-    {
-        $page = new PageDocument();
-        $page->setParent($this->parent);
-        $page->setResourceLocator($resourceLocator);
-        $page->setStructureType('contact');
-        $page->setCreator(1);
-        $page->setChanger(1);
-        $page->setTitle($title);
-        $page->setLocale('de');
-        $this->manager->persist($page);
+        foreach ($segments as $segment) {
+            $page = new PageDocument();
+            $page->setParent($parent);
+            $page->setResourceSegment($segment);
+            $page->setStructureType('contact');
+            $page->setCreator(1);
+            $page->setChanger(1);
+            $page->setTitle('Hai');
+            $page->setLocale($locale);
+            $this->manager->persist($page);
+            $parent = $page;
+        }
+
         $this->manager->flush();
 
         $page = $this->manager->find(null, $page->getPath());

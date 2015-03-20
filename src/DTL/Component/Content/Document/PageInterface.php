@@ -55,14 +55,14 @@ interface PageInterface extends DocumentInterface
      *
      * @return string
      */
-    public function getResourceLocator();
+    public function getResourceSegment();
 
     /**
      * Set the resource locator
      *
      * @param string
      */
-    public function setResourceLocator($resourceLocator);
+    public function setResourceSegment($resourceSegment);
 
     /**
      * Return the date upon which the Page was published

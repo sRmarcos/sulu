@@ -80,7 +80,6 @@ class PhpcrOdmInitializer implements InitializerInterface
         foreach ($webspace->getLocalizations() as $localization) {
             $page->setTitle('Homepage');
             $page->setStructureType('overview');
-            $page->setResourceLocator('');
             $page->setLocale('en');
             $page->setWorkflowState(WorkflowState::PUBLISHED);
             $manager->bindTranslation($page, $localization->getLocalization());

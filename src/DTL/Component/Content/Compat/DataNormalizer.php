@@ -6,6 +6,7 @@ use Sulu\Component\Content\StructureInterface;
 use DTL\Component\Content\Document\WorkflowState;
 use Sulu\Component\Content\Structure as LegacyStructure;
 use DTL\Component\Content\Document\PageInterface;
+use PHPCR\Util\PathHelper;
 
 /**
  * Normalizes the legacy Sulu request data
@@ -48,7 +49,7 @@ class DataNormalizer
 
         $normalized = array(
             'title' => $this->getAndUnsetValue($data, 'title'),
-            'resourceLocator' => $this->getAndUnsetValue($data, 'url'),
+            'resourceSegment' => PathHelper::getNodeName($this->getAndUnsetValue($data, 'url')),
             'redirectType' => $this->getAndUnsetRedirectType($data),
             'redirectTarget' => $this->getAndUnsetValue($data, 'internal_link'),
             'redirectExternal' => $this->getAndUnsetValue($data, 'external'),

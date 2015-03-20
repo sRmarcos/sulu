@@ -41,7 +41,7 @@ class PageDocumentType extends AbstractDocumentType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('resourceLocator', 'text');
+        $builder->add('resourceSegment', 'text');
         $builder->add('navigationContexts', 'collection', array(
             'type' => 'text',
             'allow_add' => true,

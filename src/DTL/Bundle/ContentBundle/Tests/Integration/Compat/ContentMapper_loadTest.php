@@ -157,7 +157,7 @@ class ContentMapper_loadTest extends BaseTestCase
         $this->createDocument('/cmf/sulu_io/contents/foo-bar', 'de');
         $this->manager->flush();
 
-        $content = $this->contentMapper->loadByResourceLocator('/foo-bar/foo-bar', 'sulu_io', 'de');
+        $content = $this->contentMapper->loadByResourceLocator('/foo-bar', 'sulu_io', 'de');
         $this->assertEquals('/cmf/sulu_io/contents/foo-bar', $content->getPath());
     }
 
@@ -347,7 +347,7 @@ class ContentMapper_loadTest extends BaseTestCase
         $document->setTitle($name);
         $document->setParent($parent);
         $document->setStructureType('contact');
-        $document->setResourceLocator('/' . $name);
+        $document->setResourceSegment($name);
         $document->setLocale($locale);
 
         $this->manager->persist($document);

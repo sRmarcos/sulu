@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="dtl_content.routing_auto.adapter.sulu_phpcr.class">DTL\Component\Content\RoutingAuto\SuluDocumentAdapter</parameter>
+        <parameter key="dtl_content.routing_auto.provider.sulu_resource_locator.class">DTL\Component\Content\RoutingAuto\Provider\SuluResourceLocatorProvider</parameter>
     </parameters>
 
     <services>
@@ -14,6 +15,10 @@
             <argument type="service" id="sulu.phpcr.session" />
             <argument type="service" id="sulu_core.webspace.request_analyzer.admin" />
             <tag name="cmf_routing_auto.adapter" alias="sulu_phpcr" />
+        </service>
+
+        <service id="dtl_content.routing_auto.provider.sulu_resource_locator" class="%dtl_content.routing_auto.provider.sulu_resource_locator.class%">
+            <tag name="cmf_routing_auto.token_provider" alias="sulu_resource_locator" />
         </service>
     </services>
 

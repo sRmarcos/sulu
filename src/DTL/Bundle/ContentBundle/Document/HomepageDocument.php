@@ -25,9 +25,9 @@ class HomepageDocument extends BasePageDocument
         $this->name = $name;
     }
 
-    public function getResourceLocator()
+    public function getResourceSegment()
     {
-        return '/';
+        return null;
     }
 
     public function getDocumentType()

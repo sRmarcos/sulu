@@ -36,7 +36,7 @@ class PageDocumentTest extends SuluTestCase
                     'Title' => 'Foobar',
                     'Locale' => 'de',
                     'StructureType' => 'contact',
-                    'ResourceLocator' => '/foo/bar',
+                    'ResourceSegment' => 'foo/bar',
                     'ShadowLocaleEnabled' => true,
                     'ShadowLocale' => 'de',
                     'Creator' => 2,
@@ -56,7 +56,7 @@ class PageDocumentTest extends SuluTestCase
                     'Title' => 'Foobar',
                     'Locale' => 'en',
                     'StructureType' => 'contact',
-                    'ResourceLocator' => '/foo/bar',
+                    'ResourceSegment' => 'foo/bar',
                     'Creator' => 2,
                     'Changer' => 3,
                     'Content' => array(
@@ -164,7 +164,7 @@ class PageDocumentTest extends SuluTestCase
         $page->setParent($this->parent);
         $page->setTitle($title);
         $page->setLocale('de');
-        $page->setResourceLocator('/foo/bar');
+        $page->setResourceSegment('foo/bar');
         $page->setStructureType('contact');
         $page->setCreator(1);
         $page->setChanger(1);
@@ -252,7 +252,7 @@ class PageDocumentTest extends SuluTestCase
         $page->setTitle('Hello');
         $page->setParent($this->parent);
         $page->setStructureType('contact');
-        $page->setResourceLocator('/foo');
+        $page->setResourceSegment('foo');
         $this->manager->persist($page);
         $this->manager->bindTranslation($page, $locale);
 

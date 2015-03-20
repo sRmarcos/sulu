@@ -61,6 +61,11 @@ abstract class BasePageDocument extends Document implements PageInterface
      */
     protected $shadowLocale;
 
+    /**
+     * @var string
+     */
+    protected $resourceSegment;
+
     public function __construct()
     {
         $this->workflowState = WorkflowState::TEST;
@@ -229,6 +234,22 @@ abstract class BasePageDocument extends Document implements PageInterface
         }
 
         return parent::getLocalizationState();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getResourceSegment() 
+    {
+        return $this->resourceSegment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setResourceSegment($resourceSegment)
+    {
+        $this->resourceSegment = $resourceSegment;
     }
 
     /**

@@ -47,11 +47,6 @@ class ContentMapper implements ContentMapperInterface
     private $sessionManager;
 
     /**
-     * @var ResourceLocator
-     */
-    private $resourceLocator;
-
-    /**
      * @param DataNormalizer $dataNormalizer
      * @param FormFactoryInterface $formFactory
      */
@@ -60,8 +55,7 @@ class ContentMapper implements ContentMapperInterface
         FormFactoryInterface $formFactory,
         DocumentManager $documentManager,
         StructureManager $structureManager,
-        SessionManagerInterface $sessionManager,
-        ResourceLocator $resourceLocator
+        SessionManagerInterface $sessionManager
     )
     {
         $this->dataNormalizer = $dataNormalizer;

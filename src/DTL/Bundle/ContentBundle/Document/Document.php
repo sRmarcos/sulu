@@ -74,11 +74,6 @@ abstract class Document implements DocumentInterface
     protected $structureType;
 
     /**
-     * @var string
-     */
-    protected $resourceLocator;
-
-    /**
      * @var integer
      */
     protected $creator;
@@ -227,22 +222,6 @@ abstract class Document implements DocumentInterface
     public function setStructureType($structureType)
     {
         $this->structureType = $structureType;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getResourceLocator() 
-    {
-        return $this->resourceLocator;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setResourceLocator($resourceLocator)
-    {
-        $this->resourceLocator = $resourceLocator;
     }
 
     /**

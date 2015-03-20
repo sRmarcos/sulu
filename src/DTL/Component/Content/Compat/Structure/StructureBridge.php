@@ -383,7 +383,7 @@ class StructureBridge implements StructureInterface
                 'created' => $this->document->getCreated(),
                 'changed' => $this->document->getChanged(),
                 'title' => $this->document->getTitle(),
-                'url' => $this->document->getResourceLocator(),
+                'url' => $this->document->getResourceSegment(),
             ));
 
             if (in_array(
