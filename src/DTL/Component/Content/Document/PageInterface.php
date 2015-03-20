@@ -11,6 +11,7 @@
 namespace DTL\Component\Content\Document;
 
 use Doctrine\ODM\PHPCR\ChildrenCollection;
+use DTL\Bundle\ContentBundle\Document\Route;
 
 /**
  * Documents implementing this interface represent content
@@ -109,4 +110,21 @@ interface PageInterface extends DocumentInterface
      * @return string|null
      */
     public function getShadowLocale();
+
+    /**
+     * Return all of the route documents which refer to this page.
+     *
+     * @return Route[]
+     */
+    public function getRoutes();
+
+    /**
+     * Return the cached resource locator
+     *
+     * NOTE: This is for internal use only. Use the URL generator
+     *       to generate URLs.
+     *
+     * @return string
+     */
+    public function getCachedResourceLocator();
 }

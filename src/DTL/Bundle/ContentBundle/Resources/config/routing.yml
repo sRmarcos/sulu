@@ -1,3 +1,0 @@
-dtl_content.content_form:
-    pattern: /template/form/{key}.html
-    defaults: { _controller:  dtl_content.controller.template:templateAction }

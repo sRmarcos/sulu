@@ -19,7 +19,7 @@ use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 /**
  * Sulu Route class
  */
-class Route implements RouteObjectInterface, AutoRouteInterface
+class Route extends SymfonyRoute implements RouteObjectInterface, AutoRouteInterface
 {
     /**
      * Path of this route

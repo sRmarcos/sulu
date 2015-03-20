@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
  
-namespace DTL\Component\Content\RoutingAuto;
+namespace DTL\Component\Content\Routing\Auto;
 
 use Doctrine\Bundle\PHPCRBundle\Initializer\InitializerInterface;
 use Doctrine\Bundle\PHPCRBundle\ManagerRegistry;

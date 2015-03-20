@@ -15,6 +15,7 @@ use Sulu\Component\Content\StructureInterface;
 use DTL\Component\Content\Document\PageInterface;
 use DTL\Component\Content\Document\WorkflowState;
 use DTL\Component\Content\Document\LocalizationState;
+use Symfony\Component\Routing\Route;
 
 /**
  * Page document class
@@ -65,6 +66,11 @@ abstract class BasePageDocument extends Document implements PageInterface
      * @var string
      */
     protected $resourceSegment;
+
+    /**
+     * @var Route[]
+     */
+    protected $routes;
 
     public function __construct()
     {
@@ -250,6 +256,28 @@ abstract class BasePageDocument extends Document implements PageInterface
     public function setResourceSegment($resourceSegment)
     {
         $this->resourceSegment = $resourceSegment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRoutes()
+    {
+        return $this->routes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRoute()
+    {
+        foreach ($this->routes as $route) {
+            if ($route->getAutoRouteTag() == $this->getLocale()) {
+                return $route;
+            }
+        }
+
+        return reset($this->routes);
     }
 
     /**
