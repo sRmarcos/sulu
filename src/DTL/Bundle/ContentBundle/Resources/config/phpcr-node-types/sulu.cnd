@@ -3,6 +3,7 @@
 <ncon = 'http://sulu.io/phpcr/content'>
 <lsys = 'http://sulu.io/phpcr/system/localized'>
 <nsys = 'http://sulu.io/phpcr/system'>
+<cach = 'http://sulu.io/phpcr/cache'>
 
 // New schema - using primary types
 // [sulu:base] > nt:unstructured

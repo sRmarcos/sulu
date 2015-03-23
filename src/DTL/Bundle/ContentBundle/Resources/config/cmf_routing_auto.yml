@@ -1,13 +1,12 @@
 DTL\Bundle\ContentBundle\Document\HomepageDocument:
-    uri_schema: "/{locale}"
+    uri_schema: "/"
     token_providers:
         locale: [content_method, { method: getLocale }]
     conflict_resolver: throw_exception
 
 DTL\Bundle\ContentBundle\Document\PageDocument:
-    uri_schema: "/{locale}/{parent_locator}/{segment}"
+    uri_schema: "/{parent_locator}/{segment}"
     token_providers:
-        locale: [content_method, { method: getLocale }]
-        segment: [content_method, { method: getResourceSegment, collapse_empty: true, slugify: false  }]
-        parent_locator: [sulu_resource_locator, { parent: true, collapse_empty: true }]
+        parent_locator: [sulu_resource_locator, { parent: true, allow_empty: true }]
+        segment: [content_method, { method: getResourceSegment, allow_empty: true, slugify: false  }]
     conflict_resolver: auto_increment

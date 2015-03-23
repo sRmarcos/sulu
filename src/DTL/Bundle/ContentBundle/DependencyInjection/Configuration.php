@@ -45,7 +45,6 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('localized-content')->defaultValue('lcon')->end()
                                 ->scalarNode('system')->defaultValue('nsys')->end()
                                 ->scalarNode('localized-system')->defaultValue('lsys')->end()
-                                ->scalarNode('cache')->defaultValue('cach')->end()
                             ->end()
                         ->end()
                     ->end()

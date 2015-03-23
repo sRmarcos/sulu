@@ -14,11 +14,28 @@
         <parameter key="dtl_content.phpcr_odm.event_subscriber.timestamp.class">DTL\Component\Content\PhpcrOdm\EventSubscriber\TimestampSubscriber</parameter>
         <parameter key="dtl_content.phpcr_odm.event_subscriber.blame.class">DTL\Component\Content\PhpcrOdm\EventSubscriber\BlameSubscriber</parameter>
         <parameter key="dtl_content.phpcr_odm.event_subscriber.document_node_helper.class">DTL\Component\Content\PhpcrOdm\EventSubscriber\DocumentNodeHelperSubscriber</parameter>
+        <parameter key="dtl_content.phpcr_odm.event_subscriber.document_cache_subscriber.class">DTL\Component\Content\PhpcrOdm\EventSubscriber\DocumentCacheSubscriber</parameter>
         <parameter key="dtl_content.phpcr_odm.locale_chooser.class">DTL\Component\Content\PhpcrOdm\LocaleChooser\SuluLocaleChooser</parameter>
+        <parameter key="dtl_content.phpcr_odm.document_cache_manager.class">DTL\Component\Content\PhpcrOdm\DocumentCacheManager</parameter>
         <parameter key="dtl_content.initializer.class">DTL\Bundle\ContentBundle\Initializer\PhpcrOdmInitializer</parameter>
+
+        <parameter key="dtl_content.phpcr_odm.event_subscriber.document_cache_subscriber.map" type="collection">
+            <parameter key="DTL\Component\Content\Document\PageInterface" type="collection">
+                <parameter>resourceLocator</parameter>
+            </parameter>
+        </parameter>
     </parameters>
 
     <services>
+        <service id="dtl_content.initializer" class="%dtl_content.initializer.class%">
+            <argument type="service" id="sulu_core.webspace.webspace_manager" />
+            <tag name="doctrine_phpcr.initializer" />
+        </service>
+
+        <service id="dtl_content.phpcr_odm.document_node_helper" class="%dtl_content.phpcr_odm.document_node_helper.class%">
+            <argument type="service" id="dtl_content.phpcr_odm.namespace_registry" />
+        </service>
+
         <!-- Namespace registry -->
         <service id="dtl_content.phpcr_odm.namespace_registry" class="%dtl_content.phpcr_odm.namespace_registry.class%">
             <argument type="collection" />
@@ -31,11 +48,13 @@
             <argument type="service" id="doctrine_phpcr.odm.document_manager" />
         </service>
 
-        <service id="dtl_content.phpcr_odm.document_node_helper" class="%dtl_content.phpcr_odm.document_node_helper.class%">
+        <!-- Event subscribers -->
+        <service id="dtl_content.phpcr_odm.event_subscriber.document_cache" class="%dtl_content.phpcr_odm.event_subscriber.document_cache_subscriber.class%">
             <argument type="service" id="dtl_content.phpcr_odm.namespace_registry" />
+            <argument>%dtl_content.phpcr_odm.event_subscriber.document_cache_subscriber.map%</argument>
+            <tag name="doctrine_phpcr.event_subscriber" />
         </service>
 
-        <!-- Event subscribers -->
         <service id="dtl_content.phpcr_odm.event_subscriber.structure" class="%dtl_content.phpcr_odm.event_subscriber.structure.class%">
             <argument type="service" id="doctrine_phpcr.odm.document_manager" />
             <argument type="service" id="dtl_content.phpcr_odm.serializer.flat" />
@@ -46,11 +65,6 @@
             <argument type="service" id="doctrine_phpcr.odm.document_manager" />
             <argument type="service" id="cmf_routing_auto.slugifier" />
             <tag name="doctrine_phpcr.event_subscriber" />
-        </service>
-
-        <service id="dtl_content.initializer" class="%dtl_content.initializer.class%">
-            <argument type="service" id="sulu_core.webspace.webspace_manager" />
-            <tag name="doctrine_phpcr.initializer" />
         </service>
 
         <service id="dtl_content.phpcr_odm.event_subscriber.timestamp" class="%dtl_content.phpcr_odm.event_subscriber.timestamp.class%">
@@ -72,6 +86,12 @@
             <argument type="service" id="sulu_core.webspace.request_analyzer" />
             <argument type="service" id="sulu_core.webspace.webspace_manager" />
             <argument type="service" id="dtl_content.phpcr_odm.document_node_helper" />
+        </service>
+
+        <!-- Document Cache Manager -->
+        <service id="dtl_content.phpcr_odm.document_cache_manager" class="%dtl_content.phpcr_odm.document_cache_manager.class%">
+            <argument type="service" id="doctrine_phpcr.odm.document_manager" />
+            <argument type="service" id="dtl_content.phpcr_odm.namespace_registry" />
         </service>
     </services>
 </container>

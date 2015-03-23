@@ -41,12 +41,12 @@ class SuluDocumentAdapterTest extends SuluTestCase
             array(
                 'de',
                 array('this-is-a-base-document'),
-                '/de/this-is-a-base-document',
+                '/this-is-a-base-document',
             ),
             array(
                 'de',
                 array('resource/locator', 'this-is-my-title'),
-                '/de/resource/locator/this-is-my-title',
+                '/resource/locator/this-is-my-title',
             ),
         );
     }

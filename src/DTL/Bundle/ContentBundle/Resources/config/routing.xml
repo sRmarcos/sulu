@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
+    >
+
+    <parameters>
+        <parameter key="dtl_content.routing.auto.adapter.sulu_phpcr.class">DTL\Component\Content\Routing\Auto\SuluDocumentAdapter</parameter>
+        <parameter key="dtl_content.routing.auto.provider.sulu_resource_locator.class">DTL\Component\Content\Routing\Auto\Provider\SuluResourceLocatorProvider</parameter>
+        <parameter key="dtl_content.routing.page_url_generator.class">DTL\Component\Content\Routing\PageUrlGenerator</parameter>
+        <parameter key="dtl_content.routing.event_subscriber.document_cache.class">DTL\Component\Content\Routing\EventSubscriber\DocumentCacheSubscriber</parameter>
+    </parameters>
+
+    <services>
+        <service id="dtl_content.routing.auto.adapter.sulu_phpcr" class="%dtl_content.routing.auto.adapter.sulu_phpcr.class%">
+            <argument type="service" id="doctrine_phpcr.odm.document_manager" />
+            <argument type="service" id="sulu.phpcr.session" />
+            <tag name="cmf_routing_auto.adapter" alias="sulu_phpcr" />
+        </service>
+
+        <service id="dtl_content.routing.event_subscriber.document_cache" class="%dtl_content.routing.event_subscriber.document_cache.class%">
+            <argument type="service" id="dtl_content.phpcr_odm.document_cache_manager" />
+            <argument type="service" id="dtl_content.phpcr_odm.document_node_helper" />
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <service id="dtl_content.routing.auto.provider.sulu_resource_locator" class="%dtl_content.routing.auto.provider.sulu_resource_locator.class%">
+            <tag name="cmf_routing_auto.token_provider" alias="sulu_resource_locator" />
+        </service>
+
+        <service id="dtl_content.routing.auto.provider.sulu_resource_locator" class="%dtl_content.routing.auto.provider.sulu_resource_locator.class%">
+            <tag name="cmf_routing_auto.token_provider" alias="sulu_resource_locator" />
+        </service>
+
+        <service id="dtl_content.routing.url_generator.page" class="%dtl_content.routing.page_url_generator.class%">
+            <argument type="service" id="sulu.phpcr.session" />
+            <argument type="service" id="sulu_core.webspace.request_analyzer" />
+        </service>
+    </services>
+
+</container>
+
+

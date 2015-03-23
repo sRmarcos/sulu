@@ -64,10 +64,23 @@ class SuluDocumentAdapter extends PhpcrOdmAdapter
      */
     public function createAutoRoute(UriContext $uriContext, $contentDocument, $autoRouteTag)
     {
-        $path = $this->sessionManager->getRoutePath($contentDocument->getWebspaceKey());
+        $path = $this->sessionManager->getRoutePath($contentDocument->getWebspaceKey(), $uriContext->getLocale());
 
         $uri = $uriContext->getUri();
         $parentDocument = $this->documentManager->find(null, $path);
+
+         // if we couldn't find the locale node, try getting the parent node (e.g. contents/).
+         // The locale node will then be created automatically.
+         if (null === $parentDocument) {
+             $parentDocument = $this->documentManager->find(null, PathHelper::getParentPath($path));
+             $uri = '/' . $uriContext->getLocale() . $uri;
+         }
+ 
+         if (null === $parentDocument) {
+             throw new \RuntimeException(sprintf('Cannot webspace routes folder at path "%s".',
+                 $path
+             ));
+         }
 
         $segments = preg_split('#/#', $uri, null, PREG_SPLIT_NO_EMPTY);
         $headName = array_pop($segments);
@@ -113,10 +126,18 @@ class SuluDocumentAdapter extends PhpcrOdmAdapter
         $subject = $uriContext->getSubjectObject();
         $webspace = $subject->getWebspaceKey();
         $locale = $uriContext->getLocale();
-        $path = $this->sessionManager->getRoutePath($webspace) . $uri;
+        $path = $this->generateRoutePath($webspace, $locale, $uri);
 
         $route = $this->dm->find(null, $path);
 
         return $route;
+    }
+
+    private function generateRoutePath($webspace, $locale, $uri = '')
+    {
+        return rtrim(sprintf('%s%s',
+            rtrim($this->sessionManager->getRoutePath($webspace, $locale), '/'),
+            $uri
+        ), '/');
     }
 }
