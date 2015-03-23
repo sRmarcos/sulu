@@ -302,7 +302,7 @@ abstract class Document implements DocumentInterface
     public function setContent($content)
     {
         $this->content = $content;
-        $this->contentHash = uniqid();
+        $this->contentHash = md5(serialize($content));
     }
 
     /**

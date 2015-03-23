@@ -1,6 +1,6 @@
 <?php
 
-namespace DTL\Component\Content\RoutingAuto\Provider;
+namespace DTL\Component\Content\Routing\Auto\Provider;
 
 use Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;

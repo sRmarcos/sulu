@@ -1,9 +1,9 @@
 <?php
 
-namespace DTL\Component\Content\RoutingAuto\Provider;
+namespace DTL\Component\Content\Routing\Auto\Provider;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use DTL\Component\Content\RoutingAuto\Provider\SuluResourceLocatorProvider;
+use DTL\Component\Content\Routing\Auto\Provider\SuluResourceLocatorProvider;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use DTL\Component\Content\Document\PageInterface;
 

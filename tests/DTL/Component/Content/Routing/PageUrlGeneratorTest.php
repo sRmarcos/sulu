@@ -132,4 +132,32 @@ class PageUrlGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expectedUrl, $result);
     }
+
+    /**
+     * It returns any route if no no localization found
+     */
+    public function testGenerateNoLocalized()
+    {
+        $routesPath = '/cms/path/routes/en';
+        $routePath = 'foobar/barfoo';
+        $expectedUrl = 'http://www.example.com/en/foobar/barfoo';
+
+        $this->page->getCachedResourceLocator()->willReturn(null);
+        $this->page->getRoutes()->willReturn(array(
+            $this->route1->reveal()
+        ));
+        $this->route1->getAutoRouteTag()->willReturn('de');
+        $this->page->getLocale()->willReturn('fr');
+        $this->page->getWebspaceKey()->willReturn('test');
+        $this->sessionManager->getRoutePath('test', 'fr')->willReturn($routesPath);
+        $this->route1->getPath()->willReturn($routesPath . '/' . $routePath);
+
+        $result = $this->generator->generate(
+            $this->page->reveal(),
+            array(),
+            true
+        );
+
+        $this->assertEquals($expectedUrl, $result);
+    }
 }

@@ -12,14 +12,13 @@
 
 namespace DTL\Bundle\ContentBundle\Document;
 
-use Symfony\Component\Routing\Route as SymfonyRoute;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 
 /**
  * Sulu Route class
  */
-class Route extends SymfonyRoute implements RouteObjectInterface, AutoRouteInterface
+class Route implements RouteObjectInterface, AutoRouteInterface
 {
     /**
      * Path of this route

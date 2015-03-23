@@ -60,6 +60,15 @@ class SuluDocumentAdapterTest extends SuluTestCase
         $this->assertEquals($expectedUrl, $uriContext->getUri());
     }
 
+    public function testDefunctRouteHandler()
+    {
+        $this->createUriContexts('de', array('hello', 'this', 'is'));
+
+        $page = $this->manager->find(null, '/cmf/sulu_io/contents/hello');
+        $this->assertNotNull($page);
+        $page->setResourceSegment('barbar');
+    }
+
     private function createUriContexts($locale, $segments)
     {
         $parent = $this->parent;
@@ -71,7 +80,7 @@ class SuluDocumentAdapterTest extends SuluTestCase
             $page->setStructureType('contact');
             $page->setCreator(1);
             $page->setChanger(1);
-            $page->setTitle('Hai');
+            $page->setTitle($segment);
             $page->setLocale($locale);
             $this->manager->persist($page);
             $parent = $page;

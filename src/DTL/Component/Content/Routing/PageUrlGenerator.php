@@ -74,6 +74,20 @@ class PageUrlGenerator implements VersatileGeneratorInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getContext()
+    {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setContext(RequestContext $context)
+    {
+    }
+
+    /**
      * Return the resource locator for the given PageInterface object
      *
      * @param PageInterface $page
@@ -113,14 +127,6 @@ class PageUrlGenerator implements VersatileGeneratorInterface
         );
 
         return $resourceLocator;
-    }
-
-    public function getContext()
-    {
-    }
-
-    public function setContext(RequestContext $context)
-    {
     }
 }
 

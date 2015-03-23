@@ -26,6 +26,7 @@ use Symfony\Cmf\Bundle\RoutingAutoBundle\Adapter\PhpcrOdmAdapter;
 use DTL\Bundle\ContentBundle\Document\Route;
 use Doctrine\ODM\PHPCR\Document\Generic;
 use PHPCR\Util\PathHelper;
+use DTL\Component\Content\PhpcrOdm\DocumentCacheManager;
 
 /**
  * Sulu adapter for the RoutingAuto Symfony CMF component

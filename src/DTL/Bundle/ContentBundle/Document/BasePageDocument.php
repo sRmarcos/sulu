@@ -15,7 +15,6 @@ use Sulu\Component\Content\StructureInterface;
 use DTL\Component\Content\Document\PageInterface;
 use DTL\Component\Content\Document\WorkflowState;
 use DTL\Component\Content\Document\LocalizationState;
-use Symfony\Component\Routing\Route;
 
 /**
  * Page document class
@@ -71,6 +70,11 @@ abstract class BasePageDocument extends Document implements PageInterface
      * @var Route[]
      */
     protected $routes;
+
+    /**
+     * @var string
+     */
+    protected $cacheResourceLocator;
 
     public function __construct()
     {

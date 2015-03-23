@@ -117,14 +117,4 @@ interface PageInterface extends DocumentInterface
      * @return Route[]
      */
     public function getRoutes();
-
-    /**
-     * Return the cached resource locator
-     *
-     * NOTE: This is for internal use only. Use the URL generator
-     *       to generate URLs.
-     *
-     * @return string
-     */
-    public function getCachedResourceLocator();
 }

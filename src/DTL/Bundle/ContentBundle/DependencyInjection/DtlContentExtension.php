@@ -14,14 +14,29 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 
 /**
  * This is the class that loads and manages your bundle configuration
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class DtlContentExtension extends Extension
+class DtlContentExtension extends Extension implements PrependExtensionInterface
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function prepend(ContainerBuilder $container)
+    {
+        if ($container->hasExtension('cmf_routing')) {
+            $container->prependExtensionConfig('cmf_routing', array(
+                'dynamic' => array(
+                    'url_generator' => 'dtl_content.routing.page_url_generator',
+                ),
+            ));
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -34,7 +49,7 @@ class DtlContentExtension extends Extension
         $loader->load('phpcr_odm.xml');
         $loader->load('form.xml');
         $loader->load('form_property_types.xml');
-        $loader->load('routing_auto.xml');
+        $loader->load('routing.xml');
         $loader->load('structure.xml');
         $loader->load('controller.xml');
         $loader->load('property.xml');
@@ -46,11 +61,20 @@ class DtlContentExtension extends Extension
 
         $this->processStructure($config['structure'], $container);
         $this->processPhpcrOdm($config['phpcr_odm'], $container);
+        $this->processRouting($config['routing'], $container);
     }
 
     private function processStructure($config, ContainerBuilder $container)
     {
         $this->processPaths($config['paths'], $container);
+    }
+
+    private function processRouting($config, ContainerBuilder $container)
+    {
+        if (false === $config['resource_locator_cache']) {
+            $container->removeDefinition('dtl_content.routing.event_subscriber.document_cache');
+            $container->removeDefinition('dtl_content.phpcr_odm.event_subscriber.document_cache');
+        }
     }
 
     private function processPaths($config, ContainerBuilder $container)
