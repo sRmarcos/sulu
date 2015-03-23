@@ -437,7 +437,17 @@ class StructureBridge implements StructureInterface
      */
     public function getPropertiesByTagName($tagName)
     {
-        $this->notImplemented(__METHOD__);
+        $properties = array();
+
+        foreach ($this->structure->getProperties() as $name => $property) {
+            foreach ($property->tags as $tag) {
+                if ($tag['name'] == $tagName) {
+                    $properties[] = $this->getProperty($name);
+                }
+            }
+        }
+
+        return $properties;
     }
 
     /**

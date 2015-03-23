@@ -302,7 +302,10 @@ abstract class Document implements DocumentInterface
     public function setContent($content)
     {
         $this->content = $content;
-        $this->contentHash = md5(serialize($content));
+
+        // TODO: Hack to force the UOW to recalculate the changeset
+        //       We could remove this with: https://github.com/doctrine/phpcr-odm/issues/417
+        $this->contentHash = md5(json_encode($content));
     }
 
     /**
