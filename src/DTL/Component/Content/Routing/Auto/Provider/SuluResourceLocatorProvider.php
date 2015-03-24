@@ -6,9 +6,17 @@ use Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use DTL\Component\Content\Document\PageInterface;
+use Doctrine\ODM\PHPCR\DocumentManager;
 
 class SuluResourceLocatorProvider implements TokenProviderInterface
 {
+    private $documentManager;
+
+    public function __construct(DocumentManager $documentManager)
+    {
+        $this->documentManager = $documentManager;
+    }
+
     public function provideValue(UriContext $uriContext, $options)
     {
         $subject = $uriContext->getSubjectObject();
@@ -37,6 +45,7 @@ class SuluResourceLocatorProvider implements TokenProviderInterface
             if (!$document instanceof PageInterface) {
                 break;
             }
+            $this->documentManager->findTranslation(null, $document->getUuid(), $uriContext->getLocale());
 
             $resourceSegment = $document->getResourceSegment();
 

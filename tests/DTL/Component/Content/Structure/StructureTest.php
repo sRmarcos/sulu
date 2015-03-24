@@ -22,6 +22,7 @@ class StructureTest extends ItemTest
         $this->prop2 = new Property('prop_2');
         $this->prop3 = new Property('prop_3');
         $this->prop3->localized = true;
+        $this->prop3->tags = array(array('name' => 'foobar'));
         $this->prop4 = new Property('prop_4');
 
         $this->section = new Section('section_1');
@@ -43,6 +44,14 @@ class StructureTest extends ItemTest
             'prop_3' => $this->prop3,
             'prop_4' => $this->prop4,
         ), $properties);
+    }
+
+    public function testGetPropertiesByTag()
+    {
+        $result = $this->structure->getPropertiesByTag('foobar');
+        $this->assertCount(1, $result);
+        $property = reset($result);
+        $this->assertSame($property, $this->prop3);
     }
 
     public function testTransformToModel()

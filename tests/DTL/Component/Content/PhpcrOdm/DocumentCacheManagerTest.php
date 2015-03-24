@@ -27,21 +27,21 @@ class DocumentCacheManagerTest extends \PHPUnit_Framework_TestCase
     public function testSetCache()
     {
         $this->documentManager->getClassMetadata('stdClass')->willReturn($this->classMetadata);
-        $this->classMetadata->getFieldMapping('hello')->willReturn(array(
+        $this->classMetadata->getFieldMapping('cacheHello')->willReturn(array(
             'property' => 'cach:hello',
         ));
-        $this->classMetadata->setFieldValue($this->testObject, 'hello', 'goodbye')->shouldBeCalled();
+        $this->classMetadata->setFieldValue($this->testObject, 'cacheHello', 'goodbye')->shouldBeCalled();
         $this->manager->setCache($this->testObject, 'hello', 'goodbye');
     }
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Property "hello" in class "stdClass" does not seem to be a cached property
+     * @expectedExceptionMessage Property "cacheHello" in class "stdClass" does not seem to be a cached property
      */
     public function testSetCacheNotExist()
     {
         $this->documentManager->getClassMetadata('stdClass')->willReturn($this->classMetadata);
-        $this->classMetadata->getFieldMapping('hello')->willReturn(array(
+        $this->classMetadata->getFieldMapping('cacheHello')->willReturn(array(
             'property' => 'hello',
         ));
         $this->manager->setCache($this->testObject, 'hello', 'goodbye');
@@ -50,10 +50,10 @@ class DocumentCacheManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetCache()
     {
         $this->documentManager->getClassMetadata('stdClass')->willReturn($this->classMetadata);
-        $this->classMetadata->getFieldMapping('hello')->willReturn(array(
+        $this->classMetadata->getFieldMapping('cacheHello')->willReturn(array(
             'property' => 'cach:hello',
         ));
-        $this->classMetadata->getFieldValue($this->testObject, 'hello')->willReturn('goodbye');
+        $this->classMetadata->getFieldValue($this->testObject, 'cacheHello')->willReturn('goodbye');
         $result = $this->manager->getCache($this->testObject, 'hello');
         $this->assertEquals('goodbye', $result);
     }

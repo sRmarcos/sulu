@@ -8,5 +8,5 @@ DTL\Bundle\ContentBundle\Document\PageDocument:
     uri_schema: "/{parent_locator}/{segment}"
     token_providers:
         parent_locator: [sulu_resource_locator, { parent: true, allow_empty: true }]
-        segment: [content_method, { method: getResourceSegment, allow_empty: true, slugify: false  }]
+        segment: [content_method, { method: getResourceSegment, allow_empty: true, slugify: true  }]
     conflict_resolver: auto_increment

@@ -52,7 +52,7 @@ class Structure extends Item
      */
     public function transformToModel()
     {
-       $structure = clone $this;
+        $structure = clone $this;
         $structure->children = $this->getProperties();
 
         return $structure;
@@ -80,5 +80,20 @@ class Structure extends Item
         return array_filter($this->getProperties(), function (Property $property) {
             return $property->localized === false;
         });
+    }
+
+    public function getPropertiesByTag($tagName)
+    {
+        $properties = array();
+
+        foreach ($this->getProperties() as $property) {
+            foreach ($property->tags as $tag) {
+                if ($tag['name'] == $tagName){
+                    $properties[$property->name] = $property;
+                }
+            }
+        }
+
+        return $properties;
     }
 }

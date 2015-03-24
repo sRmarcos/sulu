@@ -6,17 +6,25 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use DTL\Component\Content\Routing\Auto\Provider\SuluResourceLocatorProvider;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use DTL\Component\Content\Document\PageInterface;
+use Doctrine\ODM\PHPCR\DocumentManager;
 
 class SuluResourceLocatorProviderTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        $this->provider = new SuluResourceLocatorProvider();
+        $this->documentManager = $this->prophesize(DocumentManager::class);
+        $this->provider = new SuluResourceLocatorProvider(
+            $this->documentManager->reveal()
+        );
         $this->optionsResolver = new OptionsResolver();
         $this->notPage = new \stdClass;
         $this->document = $this->prophesize(PageInterface::class);
         $this->parentDocument = $this->prophesize(PageInterface::class);
         $this->uriContext = $this->prophesize(UriContext::class);
+
+        $this->document->getUuid()->willReturn('1234');
+        $this->parentDocument->getUuid()->willReturn('1234');
+        $this->uriContext->getLocale()->willReturn('de');
     }
 
     /**
@@ -35,6 +43,9 @@ class SuluResourceLocatorProviderTest extends \PHPUnit_Framework_TestCase
     public function testProviderEmptySegment()
     {
         $this->uriContext->getSubjectObject()->willReturn($this->document->reveal());
+        $this->document->getResourceSegment()->willReturn(null);
+        $this->document->getParent()->willReturn(new \stdClass);
+
         $this->provideValue(array());
     }
 
@@ -46,6 +57,7 @@ class SuluResourceLocatorProviderTest extends \PHPUnit_Framework_TestCase
         $this->uriContext->getSubjectObject()->willReturn($this->document->reveal());
         $this->document->getParent()->willReturn(new \stdClass);
         $this->document->getResourceSegment()->willReturn('hello');
+        $this->document->getParent()->willReturn(new \stdClass);
         $result = $this->provideValue(array());
         $this->assertEquals('hello', $result);
     }

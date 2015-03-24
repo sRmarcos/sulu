@@ -29,6 +29,7 @@
         </service>
 
         <service id="dtl_content.routing.auto.provider.sulu_resource_locator" class="%dtl_content.routing.auto.provider.sulu_resource_locator.class%">
+            <argument type="service" id="doctrine_phpcr.odm.document_manager" />
             <tag name="cmf_routing_auto.token_provider" alias="sulu_resource_locator" />
         </service>
 

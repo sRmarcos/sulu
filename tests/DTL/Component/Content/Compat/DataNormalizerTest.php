@@ -1,6 +1,6 @@
 <?php
 
-namespace vendor\sulu\sulu\tests\DTL\Component\Content\Compat;
+namespace DTL\Component\Content\Compat;
 
 use DTL\Component\Content\Compat\DataNormalizer;
 use Sulu\Component\Content\StructureInterface;
@@ -30,7 +30,7 @@ class DataNormalizerTest extends \PHPUnit_Framework_TestCase
                 1234,
                 array(
                     'title' => 'Title',
-                    'resourceLocator' => '/path/to',
+                    'resourceSegment' => 'to',
                     'redirectType' => 'external',
                     'workflowState' => 'published',
                     'navigationContexts' => array('one', 'two'),

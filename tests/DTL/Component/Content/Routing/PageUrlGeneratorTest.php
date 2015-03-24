@@ -70,31 +70,12 @@ class PageUrlGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It generates a URL for a page with a cached URL
-     */
-    public function testGenerateWithCachedUrl()
-    {
-        $url = '/u/r/l';
-        $expectedUrl = 'http://www.example.com/en/u/r/l';
-        $this->page->getCachedResourceLocator()->willReturn($url);
-
-        $result = $this->generator->generate(
-            $this->page->reveal(),
-            array(),
-            true
-        );
-
-        $this->assertEquals($expectedUrl, $result);
-    }
-
-    /**
      * It should throw an exception when no routes are associated
      *
      * @expectedException Symfony\Component\Routing\Exception\RouteNotFoundException
      */
-    public function testGenerateNoCacheNoRoutes()
+    public function testGenerateNoRoutes()
     {
-        $this->page->getCachedResourceLocator()->willReturn(null);
         $this->page->getRoutes()->willReturn(array());
         $this->page->getPath()->willReturn('/page/to');
 
@@ -114,7 +95,6 @@ class PageUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $routePath = 'foobar/barfoo';
         $expectedUrl = 'http://www.example.com/en/foobar/barfoo';
 
-        $this->page->getCachedResourceLocator()->willReturn(null);
         $this->page->getRoutes()->willReturn(array(
             $this->route1->reveal()
         ));
@@ -142,7 +122,6 @@ class PageUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $routePath = 'foobar/barfoo';
         $expectedUrl = 'http://www.example.com/en/foobar/barfoo';
 
-        $this->page->getCachedResourceLocator()->willReturn(null);
         $this->page->getRoutes()->willReturn(array(
             $this->route1->reveal()
         ));

@@ -53,7 +53,8 @@ class ContentSerializerSubscriber implements EventSubscriber
             Event::preUpdate,
             Event::endFlush,
             Event::postLoadTranslation,
-            Event::preBindTranslation,
+            Event::preCreateTranslation,
+            Event::preUpdateTranslation,
         );
     }
 
@@ -107,7 +108,12 @@ class ContentSerializerSubscriber implements EventSubscriber
         $this->postLoad($event);
     }
 
-    public function preBindTranslation(LifecycleEventArgs $event)
+    public function preCreateTranslation(LifecycleEventArgs $event)
+    {
+        $this->preUpdateTranslation($event);
+    }
+
+    public function preUpdateTranslation(LifecycleEventArgs $event)
     {
         $document = $event->getObject();
         if (false === $this->isDocument($document)) {

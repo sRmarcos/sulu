@@ -93,13 +93,8 @@ class PageUrlGenerator implements VersatileGeneratorInterface
      * @param PageInterface $page
      * @param mixed $useCache
      */
-    private function getResourceLocator(PageInterface $page, $useCache = true)
+    private function getResourceLocator(PageInterface $page)
     {
-        $cachedUrl = $page->getCachedResourceLocator();
-        if (true === $useCache && $cachedUrl) {
-            return $page->getCachedResourceLocator();
-        }
-
         $routes = $page->getRoutes();
 
         if (empty($routes)) {

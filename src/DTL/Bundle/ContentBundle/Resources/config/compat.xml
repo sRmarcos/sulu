@@ -18,5 +18,11 @@
         </service>
 
         <service id="dtl_content.compat.data_normalizer" class="DTL\Component\Content\Compat\DataNormalizer" />
+
+        <service id="dtl_content.compat.resource_locator_repository" class="DTL\Component\Content\Compat\ResourceLocatorRepository">
+            <argument type="service" id="cmf_routing_auto.uri_generator" />
+            <argument type="service" id="doctrine_phpcr.odm.document_manager" />
+            <argument type="service" id="dtl_content.structure.factory" />
+        </service>
     </services>
 </container>

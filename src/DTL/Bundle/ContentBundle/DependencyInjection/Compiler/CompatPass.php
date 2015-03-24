@@ -20,6 +20,7 @@ class CompatPass implements CompilerPassInterface
         $this->replaceStructureManager($container);
         $this->replaceContentMapper($container);
         $this->replaceNodeRepository($container);
+        $this->replaceResourceLocatorRepository($container);
     }
 
     public function replaceStructureManager(ContainerBuilder $container)
@@ -55,5 +56,15 @@ class CompatPass implements CompilerPassInterface
         $nodeRepository->addArgument(new Reference('sulu_content.node_repository.original'));
         $nodeRepository->addArgument(new Reference('dtl_content.compat.content_mapper'));
         $container->setAlias('sulu_content.node_repository', 'dtl_content.compat.node_repository');
+    }
+
+    public function replaceResourceLocatorRepository(ContainerBuilder $container)
+    {
+        if (!$container->hasDefinition('sulu_content.rl_repository')) {
+            return;
+        }
+
+        $container->removeDefinition('sulu_content.rl_repository');
+        $container->setAlias('sulu_content.rl_repository', 'dtl_content.compat.resource_locator_repository');
     }
 }
