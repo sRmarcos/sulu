@@ -19,6 +19,8 @@ use DTL\Component\Content\Document\WorkflowState;
 use Sulu\Component\Content\StructureType;
 use DTL\Component\Content\Structure\Item;
 use DTL\Component\Content\Structure\Section;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use JMS\Serializer\Annotation\Exclude;
 
 class StructureBridge implements StructureInterface
 {
@@ -28,17 +30,31 @@ class StructureBridge implements StructureInterface
     private $structure;
 
     /**
+     * @Exclude
      * @var Document
      */
     private $document;
 
     /**
-     * @param Structure $structure
+     * @Exclude
+     * @var UrlGeneratorInterface
      */
-    public function __construct(Structure $structure, DocumentInterface $document = null)
+    private $urlGenerator;
+
+    /**
+     * @param Structure $structure
+     * @param DocumentInterface $document
+     * @param UrlGeneratorInterface $urlGenerator
+     */
+    public function __construct(
+        Structure $structure,
+        DocumentInterface $document = null,
+        UrlGeneratorInterface $urlGenerator = null
+    )
     {
         $this->structure = $structure;
         $this->document = $document;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -47,6 +63,14 @@ class StructureBridge implements StructureInterface
     public function setDocument(DocumentInterface $document)
     {
         $this->document = $document;
+    }
+
+    /**
+     * @param UrlGeneratorInterface $urlGenerator
+     */
+    public function setUrlGenerator(UrlGeneratorInterface $urlGenerator)
+    {
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -248,7 +272,7 @@ class StructureBridge implements StructureInterface
         $children = array();
 
         foreach ($this->getDocument()->getChildren() as $child) {
-            $children[] = new $this($this->structure, $child);
+            $children[] = new $this($this->structure, $child, $this->urlGenerator);
         }
 
         return $children;
@@ -383,7 +407,7 @@ class StructureBridge implements StructureInterface
                 'created' => $this->document->getCreated(),
                 'changed' => $this->document->getChanged(),
                 'title' => $this->document->getTitle(),
-                'url' => $this->document->getResourceSegment(),
+                'url' => $this->urlGenerator->getResourceLocator($this->document),
             ));
 
             if (in_array(

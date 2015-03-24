@@ -21,6 +21,11 @@ use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 class Route implements RouteObjectInterface, AutoRouteInterface
 {
     /**
+     * @var string
+     */
+    private $uuid;
+
+    /**
      * Path of this route
      *
      * @var string
@@ -67,11 +72,11 @@ class Route implements RouteObjectInterface, AutoRouteInterface
     private $autoRouteTag;
 
     /**
-     * Get the repository path of this url entry
+     * Get the UUID of this route
      */
-    public function getId()
+    public function getUuid()
     {
-        return $this->id;
+        return $this->uuid;
     }
 
     /**

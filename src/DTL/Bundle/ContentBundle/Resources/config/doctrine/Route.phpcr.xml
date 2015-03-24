@@ -17,6 +17,7 @@
         <parent-document name="parent"/>
         <children name="children"/>
         <reference-one name="content" property="sulu:content" strategy="HARD" />
+        <uuid name="uuid" />
 
         <field name="history" property="sulu:history" type="boolean" />
         <field name="tag" property="sulu:autoroutetag" type="string" nullable="true"/>

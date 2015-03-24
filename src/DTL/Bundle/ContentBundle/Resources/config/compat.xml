@@ -14,7 +14,7 @@
             <argument type="service" id="doctrine_phpcr.odm.default_document_manager" />
             <argument type="service" id="dtl_content.compat.structure.structure_manager" />
             <argument type="service" id="sulu.phpcr.session" />
-            <argument type="service" id="sulu.content.type.resource_locator" />
+            <argument type="service" id="dtl_content.routing.url_generator.page" />
         </service>
 
         <service id="dtl_content.compat.data_normalizer" class="DTL\Component\Content\Compat\DataNormalizer" />
@@ -23,6 +23,9 @@
             <argument type="service" id="cmf_routing_auto.uri_generator" />
             <argument type="service" id="doctrine_phpcr.odm.document_manager" />
             <argument type="service" id="dtl_content.structure.factory" />
+            <argument type="service" id="router" />
+            <argument type="service" id="dtl_content.routing.url_generator.page" />
+            <argument type="service" id="sulu.phpcr.session" />
         </service>
     </services>
 </container>

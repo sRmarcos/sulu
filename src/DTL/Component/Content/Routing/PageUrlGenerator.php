@@ -42,23 +42,23 @@ class PageUrlGenerator implements VersatileGeneratorInterface
     /**
      * {@inheritDoc}
      */
-    public function supports($page)
+    public function supports($document)
     {
-        return $page instanceof PageInterface;
+        return $document instanceof PageInterface || $document instanceof Route;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getRouteDebugMessage($page, array $parameters = array())
+    public function getRouteDebugMessage($document, array $parameters = array())
     {
-        return get_class($page);
+        return get_class($document);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function generate($page, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+    public function generate($document, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
         if ($referenceType !== UrlGeneratorInterface::ABSOLUTE_URL) {
             throw new \BadMethodCallException(
@@ -93,7 +93,7 @@ class PageUrlGenerator implements VersatileGeneratorInterface
      * @param PageInterface $page
      * @param mixed $useCache
      */
-    private function getResourceLocator(PageInterface $page)
+    public function getResourceLocator(PageInterface $page)
     {
         $routes = $page->getRoutes();
 
@@ -106,19 +106,19 @@ class PageUrlGenerator implements VersatileGeneratorInterface
 
         foreach ($routes as $route) {
             if ($route->getAutoRouteTag() == $page->getLocale()) {
-                return $this->getResourceLocatorFromRoute($page, $route);
+                return $this->getResourceLocatorFromRoute($route, $page->getWebspaceKey(), $page->getLocale());
             }
         }
 
         return $this->getResourceLocatorFromRoute($page, reset($routes));
     }
 
-    private function getResourceLocatorFromRoute($page, Route $route)
+    public function getResourceLocatorFromRoute(Route $route, $webspaceKey, $locale)
     {
-        $routeLocalePath = $this->sessionManager->getRoutePath($page->getWebspaceKey(), $page->getLocale());
+        $portalPrefix = $this->sessionManager->getRoutePath($webspaceKey, $locale);
         $resourceLocator = substr(
             $route->getPath(),
-            strlen($routeLocalePath)
+            strlen($portalPrefix)
         );
 
         return $resourceLocator;

@@ -10,3 +10,4 @@ DTL\Bundle\ContentBundle\Document\PageDocument:
         parent_locator: [sulu_resource_locator, { parent: true, allow_empty: true }]
         segment: [content_method, { method: getResourceSegment, allow_empty: true, slugify: true  }]
     conflict_resolver: auto_increment
+    defunct_route_handler: leave_redirect

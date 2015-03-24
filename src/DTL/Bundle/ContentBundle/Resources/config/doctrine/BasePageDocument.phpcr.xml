@@ -15,6 +15,7 @@
         <field name="redirectExternal" property="redirect-external" type="string" nullable="true" translated="true"/>
         <field name="resourceSegment" property="res-seg" type="string" translated="true" nullable="true" />
         <reference-one name="redirectTarget" property="nsys:redirect-target" translated="true"/>
+        <referrers name="routes" referring-document="DTL\Bundle\ContentBundle\Document\Route" referenced-by="content"/>
     </mapped-superclass>
 
 </doctrine-mapping>
