@@ -115,7 +115,6 @@ class SuluDocumentAdapter extends PhpcrOdmAdapter
     public function createRedirectRoute(AutoRouteInterface $referringAutoRoute, AutoRouteInterface $newRoute)
     {
         $referringAutoRoute->setType(AutoRouteInterface::TYPE_REDIRECT);
-        $referringAutoRoute->setContent($newRoute);
     }
 
     /**

@@ -15,6 +15,8 @@ use Sulu\Component\Content\StructureInterface;
 use DTL\Component\Content\Document\PageInterface;
 use DTL\Component\Content\Document\WorkflowState;
 use DTL\Component\Content\Document\LocalizationState;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 
 /**
  * Page document class
@@ -79,6 +81,7 @@ abstract class BasePageDocument extends Document implements PageInterface
     public function __construct()
     {
         $this->workflowState = WorkflowState::TEST;
+        $this->routes = new ArrayCollection();
     }
 
     /**
@@ -267,7 +270,23 @@ abstract class BasePageDocument extends Document implements PageInterface
      */
     public function getRoutes()
     {
-        return $this->routes;
+        return $this->routes->filter(function ($route) {
+            return AutoRouteInterface::TYPE_PRIMARY == $route->getType();
+        });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDefunctRoutes($locale = null)
+    {
+        return $this->routes->filter(function ($route) use ($locale) {
+            if ($locale && $route->getAutoRouteTag() !== $locale) {
+                return false;
+            }
+
+            return AutoRouteInterface::TYPE_REDIRECT == $route->getType();
+        });
     }
 
     /**

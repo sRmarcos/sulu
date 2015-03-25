@@ -169,14 +169,23 @@ class Route implements RouteObjectInterface, AutoRouteInterface
         ));
     }
 
+    public function getType()
+    {
+        if (true === $this->history) {
+            return AutoRouteInterface::TYPE_REDIRECT;
+        }
+
+        return AutoRouteInterface::TYPE_PRIMARY;
+    }
+
     public function getRedirectTarget() 
     {
-        return $this->content;
+        throw new \BadMethodCallException('Not implemented, we infer the redirect route from the content');
     }
     
     public function setRedirectTarget(AutoRouteInterface $redirectTarget)
     {
-        $this->content = $content;
+        // do nothing
     }
 
     public function getPath() 

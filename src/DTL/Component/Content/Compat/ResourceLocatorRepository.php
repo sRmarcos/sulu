@@ -37,13 +37,21 @@ class ResourceLocatorRepository implements ResourceLocatorRepositoryInterface
     private $pageUrlGenerator;
     private $sessionManager;
 
+    /**
+     * @param DocumentManager $documentManager
+     * @param StructureFactoryInterface $structureFactory
+     * @param SessionManagerInterface $sessionManager
+     * @param RoutingAutoUriGenerator $uriGenerator RoutingAuto URI genrator - generates candidate resource locators
+     * @param UrlGeneratorInterface $urlGenerator Admin URL generator
+     * @param PageUrlGenerator $pageUrlGenerator Page (website) URL generator
+     */
     public function __construct(
-        RoutingAutoUriGenerator $uriGenerator,
         DocumentManager $documentManager,
         StructureFactoryInterface $structureFactory,
+        SessionManagerInterface $sessionManager,
+        RoutingAutoUriGenerator $uriGenerator,
         UrlGeneratorInterface $urlGenerator,
-        PageUrlGenerator $pageUrlGenerator,
-        SessionManagerInterface $sessionManager
+        PageUrlGenerator $pageUrlGenerator
     )
     {
         $this->uriGenerator = $uriGenerator;
@@ -54,7 +62,10 @@ class ResourceLocatorRepository implements ResourceLocatorRepositoryInterface
         $this->sessionManager = $sessionManager;
     }
 
-    public function generate($parts, $parentUuid, $uuid, $webspaceKey, $languageCode, $templateKey, $segmentKey = null)
+    /**
+     * {@inheritDoc}
+     */
+    public function generate($parts, $parentUuid, $uuid, $webspaceKey, $locale, $templateKey, $segmentKey = null)
     {
         $structure = $this->structureFactory->getStructure('page', $templateKey);
         $title = $this->getTitle($structure, $parts);
@@ -62,7 +73,7 @@ class ResourceLocatorRepository implements ResourceLocatorRepositoryInterface
         $page = $this->getPage($uuid, $parentUuid);
         $page->setResourceSegment($title);
 
-        $uriContext = new UriContext($page, $languageCode);
+        $uriContext = new UriContext($page, $locale);
         $resourceLocator = $this->uriGenerator->generateUri($uriContext);
 
         return array(
@@ -73,14 +84,17 @@ class ResourceLocatorRepository implements ResourceLocatorRepositoryInterface
         );
     }
 
-    public function getHistory($uuid, $webspaceKey, $languageCode)
+    /**
+     * {@inheritDoc}
+     */
+    public function getHistory($uuid, $webspaceKey, $locale)
     {
-        $document = $this->documentManager->findTranslation(PageInterface::class, $uuid, $languageCode);
-        $route = $document->getRoute($languageCode);
-        $routes = array($route);
+        $document = $this->documentManager->findTranslation(PageInterface::class, $uuid, $locale);
+        $routes = $document->getDefunctRoutes($locale);
+        $result = array();
 
         foreach ($routes as $route) {
-            $path = $this->pageUrlGenerator->getResourceLocatorFromRoute($route, $webspaceKey, $languageCode);
+            $path = $this->pageUrlGenerator->getResourceLocatorFromRoute($route, $webspaceKey, $locale);
 
             $result[] = array(
                 'id' => $route->getUuid(),
@@ -89,12 +103,12 @@ class ResourceLocatorRepository implements ResourceLocatorRepositoryInterface
                 '_links' => array(
                     'delete' => $this->urlGenerator->generate('delete_node_resourcelocator', array(
                         'path' => $path,
-                        'language' => $languageCode,
+                        'language' => $locale,
                         'webspace' => $webspaceKey,
                     )),
                     'restore' => $this->urlGenerator->generate('put_node_resourcelocator_restore', array(
                         'path' => $path,
-                        'language' => $languageCode,
+                        'language' => $locale,
                         'webspace' => $webspaceKey,
                     )),
                 )
@@ -109,18 +123,18 @@ class ResourceLocatorRepository implements ResourceLocatorRepositoryInterface
                 'self' => $this->urlGenerator->generate('get_node_resourcelocators', array(
                     'uuid' => $uuid,
                     'webspace' => $webspaceKey,
-                    'language' => $languageCode,
+                    'language' => $locale,
                 )),
             ),
             'total' => sizeof($result)
         );
     }
 
-    public function delete($path, $webspaceKey, $languageCode, $segmentKey = null)
+    public function delete($path, $webspaceKey, $locale, $segmentKey = null)
     {
         $path = sprintf(
             '%s%s',
-            $this->sessionManager->getRoutePath($webspaceKey, $languageCode),
+            $this->sessionManager->getRoutePath($webspaceKey, $locale),
             $path
         );
         $route = $this->documentManager->find(AutoRouteInterface::class, $path);
@@ -135,23 +149,42 @@ class ResourceLocatorRepository implements ResourceLocatorRepositoryInterface
         $this->documentManager->flush();
     }
 
-    public function restore($path, $userId,  $webspaceKey, $languageCode, $segmentKey = null)
+    public function restore($path, $userId,  $webspaceKey, $locale, $segmentKey = null)
     {
-        throw new \InvalidArgumentException('TODO: THIS');
+        throw new \BadMethodCallException('Restore history URL is not supported');
     }
 
+    /**
+     * Return the page documnent for the given UUID or create a new
+     * one with the given parent/
+     *
+     * @param mixed $uuid
+     * @param mixed $parentUuid
+     *
+     * @throws RuntimeEXception If 
+     */
     private function getPage($uuid, $parentUuid)
     {
         if ($uuid) {
-            return $this->documentManager->find(null, $uuid);
+            $document = $this->documentManager->find(null, $uuid);
+
+            if (!$document) {
+                throw new \RuntimeException(
+                    'Could not find page with UUID "%s"',
+                    $uuid
+                );
+            }
+
+            return $document;
         }
 
         $parent = $this->documentManager->find(null, $parentUuid);
 
         if (!$parent) {
-            throw new \RuntimeException(
-                'No parent UUID given for resource locator generation'
-            );
+            throw new \RuntimeException(sprintf(
+                'Could not find parent page with UUID "%s"',
+                $parentUuid
+            ));
         }
 
         // Note this is currently hard coded -- we should refactor so that the admin passes the
@@ -163,6 +196,8 @@ class ResourceLocatorRepository implements ResourceLocatorRepositoryInterface
     }
 
     /**
+     * Generate a title based on the tagged resource locator property parts.
+     *
      * @param StructureInterface $structure
      * @param array $parts
      * @param string $separator default '-'
