@@ -45,6 +45,7 @@ class PhpcrOdmInitializer implements InitializerInterface
         $webspaceCollection = $this->webspaceManager->getWebspaceCollection();
 
         foreach ($webspaceCollection as $webspace) {
+            $pages = array();
             $webspaceKey = $webspace->getKey();
 
             if ($baseNode->hasNode($webspaceKey)) {

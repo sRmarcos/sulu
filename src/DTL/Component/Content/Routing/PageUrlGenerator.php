@@ -11,6 +11,7 @@ use Sulu\Component\Webspace\Analyzer\RequestAnalyzerInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Doctrine\ODM\PHPCR\DocumentManager;
 
 /**
  * UrlGenerator for objects implementing the PageInterface
@@ -28,15 +29,22 @@ class PageUrlGenerator implements VersatileGeneratorInterface
     private $requestAnalyzer;
 
     /**
+     * @var DocumentManager
+     */
+    private $documentManager;
+
+    /**
      * @param SessionManagerInterface $sessionManager
      */
     public function __construct(
         SessionManagerInterface $sessionManager,
-        RequestAnalyzerInterface $requestAnalyzer
+        RequestAnalyzerInterface $requestAnalyzer,
+        DocumentManager $documentManager
     )
     {
         $this->sessionManager = $sessionManager;
         $this->requestAnalyzer = $requestAnalyzer;
+        $this->documentManager = $documentManager;
     }
 
     /**
@@ -67,7 +75,7 @@ class PageUrlGenerator implements VersatileGeneratorInterface
             );
         }
 
-        $resourceLocator = $this->getResourceLocator($page);
+        $resourceLocator = $this->getResourceLocator($document);
         $portalUrl = $this->requestAnalyzer->getPortalUrl();
 
         return sprintf('http://%s%s', $portalUrl, $resourceLocator);
@@ -97,7 +105,13 @@ class PageUrlGenerator implements VersatileGeneratorInterface
     {
         $routes = $page->getRoutes();
 
-        if (empty($routes)) {
+        if (0 === $routes->count()) {
+            $this->documentManager->refresh($page);
+        }
+
+        $routes = $page->getRoutes();
+
+        if (0 === $routes->count()) {
             throw new RouteNotFoundException(sprintf(
                 'Page document at "%s" does not have any route objects associated with it',
                 $page->getPath()
@@ -110,16 +124,37 @@ class PageUrlGenerator implements VersatileGeneratorInterface
             }
         }
 
-        return $this->getResourceLocatorFromRoute($page, reset($routes));
+        return $this->getResourceLocatorFromRoute($route, $page->getWebspaceKey(), $page->getLOcale());
     }
 
+    /**
+     * Return the resource locator for the given Route
+     *
+     * @param Route $route
+     * @param string $webspaceKey
+     * @param string $locale
+     *
+     * @throws RuntimeException If the resource locator cannot be determined
+     */
     public function getResourceLocatorFromRoute(Route $route, $webspaceKey, $locale)
     {
         $portalPrefix = $this->sessionManager->getRoutePath($webspaceKey, $locale);
+
+        if ($portalPrefix == $route->getPath()) {
+            return '/';
+        }
+
         $resourceLocator = substr(
             $route->getPath(),
             strlen($portalPrefix)
         );
+
+        if (!$resourceLocator) {
+            throw new \RuntimeException(sprintf(
+                'Could not determine resource locator for route at path "%s" and portal prefix "%s"',
+                $route->getPath(), $portalPrefix
+            ));
+        }
 
         return $resourceLocator;
     }

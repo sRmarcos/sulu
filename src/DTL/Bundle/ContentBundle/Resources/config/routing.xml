@@ -36,6 +36,7 @@
         <service id="dtl_content.routing.url_generator.page" class="%dtl_content.routing.page_url_generator.class%">
             <argument type="service" id="sulu.phpcr.session" />
             <argument type="service" id="sulu_core.webspace.request_analyzer" />
+            <argument type="service" id="doctrine_phpcr.odm.document_manager" />
         </service>
     </services>
 
