@@ -20,12 +20,22 @@ namespace DTL\Component\Content\PhpcrOdm;
  * of the contained content prior to serialization in order that it can
  * be deserialized with the correct types.
  */
-class ContentContainer extends \ArrayObject
+class ContentContainer implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     /**
      * @var array
      */
     private $typeMap = array();
+
+    /**
+     * @var array
+     */
+    private $content = array();
+
+    public function __construct(array $content = array())
+    {
+        $this->content = $content;
+    }
 
     /**
      * Initialize the type map
@@ -64,4 +74,63 @@ class ContentContainer extends \ArrayObject
     {
         return $this->typeMap;
     }
+
+    public function exchangeArray($newArray)
+    {
+        $this->content = $newArray;
+    }
+
+    public function getArrayCopy()
+    {
+        return $this->content;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function offsetGet($offset)
+    {
+        return $this->content[$offset];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->content[$offset] = $value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->content[$offset]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->content[$offset]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function count()
+    {
+        return count($this->content);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->content);
+    }
+
 }

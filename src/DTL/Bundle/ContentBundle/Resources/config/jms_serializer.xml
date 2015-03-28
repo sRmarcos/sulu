@@ -5,18 +5,13 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="dtl_content.serializer.handler.document.class">DTL\Component\Content\Serializer\DocumentHandler</parameter>
-        <parameter key="dtl_content.serializer.subscriber.document.class">DTL\Component\Content\Serializer\Subscriber\DocumentSubscriber</parameter>
+        <parameter key="dtl_content.serializer.handler.content_container.class">DTL\Component\Content\Serializer\Handler\ContentContainerHandler</parameter>
     </parameters>
 
     <services>
 
-        <!--<service id="dtl_content.serializer.handler.document" class="%dtl_content.serializer.handler.document.class%">-->
-            <!--<tag name="jms_serializer.subscribing_handler"/>-->
-        <!--</service>-->
-
-       <service id="dtl_content.serializer.subscriber.document" class="%dtl_content.serializer.subscriber.document.class%">
-            <tag name="jms_serializer.event_subscriber" />
+        <service id="dtl_content.serializer.handler.document" class="%dtl_content.serializer.handler.content_container.class%">
+            <tag name="jms_serializer.subscribing_handler"/>
         </service>
 
     </services>

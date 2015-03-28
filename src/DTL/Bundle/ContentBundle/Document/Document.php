@@ -311,7 +311,7 @@ abstract class Document implements DocumentInterface
 
         // TODO: Hack to force the UOW to recalculate the changeset
         //       We could remove this with: https://github.com/doctrine/phpcr-odm/issues/417
-        $this->contentHash = md5(json_encode($content->getArrayCopy()));
+        $this->contentHash = md5(json_encode($content));
     }
 
     /**

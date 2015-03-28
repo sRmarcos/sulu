@@ -6,6 +6,6 @@
         <property name="contentHash" exclude="true" />
         <property name="documentNodeHelper" exclude="true" />
         <property name="node" exclude="true" />
-        <property name="routes" exclude="true" />
+        <property name="content" type="DTL\Component\Content\PhpcrOdm\ContentContainer" />
     </class>
 </serializer>

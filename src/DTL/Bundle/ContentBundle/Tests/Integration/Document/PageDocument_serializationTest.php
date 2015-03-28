@@ -32,6 +32,7 @@ class PageDocumentSerializationTest extends SuluTestCase
     public function testSerialization()
     {
         $page = $this->createPage();
+        $page->getContent()->preSerialize();
         $result = $this->serializer->serialize($page, 'json');
 
         return $result;
@@ -44,7 +45,9 @@ class PageDocumentSerializationTest extends SuluTestCase
     public function testDeserialization($data)
     {
         $page = $this->serializer->deserialize($data, PageDocument::class, 'json');
-        var_dump($page);
+        var_dump($page->getContent());
+        throw new \InvalidArgumentException('TODO: Content deserialization');
+        $this->assertInstanceOf(PageDocument::class, $page);
     }
 
     private function createPage()
