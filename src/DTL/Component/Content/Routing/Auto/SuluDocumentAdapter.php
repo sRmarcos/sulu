@@ -64,7 +64,16 @@ class SuluDocumentAdapter extends PhpcrOdmAdapter
      */
     public function createAutoRoute(UriContext $uriContext, $contentDocument, $autoRouteTag)
     {
-        $path = $this->sessionManager->getRoutePath($contentDocument->getWebspaceKey(), $uriContext->getLocale());
+        $locale = $uriContext->getLocale();
+
+        if (!$locale) {
+            throw new \InvalidArgumentException(sprintf(
+                'Document with title "%s" has no locale, cannot create auto route',
+                $contentDocument->getTitle()
+            ));
+        }
+
+        $path = $this->sessionManager->getRoutePath($contentDocument->getWebspaceKey(), $locale);
 
         $uri = $uriContext->getUri();
         $parentDocument = $this->documentManager->find(null, $path);

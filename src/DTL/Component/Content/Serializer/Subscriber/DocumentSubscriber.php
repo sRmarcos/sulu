@@ -1,12 +1,19 @@
 <?php
 
-namespace DTL\Component\Content\Compat\JmsSerializer;
+namespace DTL\Component\Content\Serializer\Subscriber;
 
-use DTL\Component\Content\Document\DocumentInterface;
+use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
+use PHPCR\NodeInterface;
 use JMS\Serializer\EventDispatcher\Events;
 use JMS\Serializer\EventDispatcher\PreSerializeEvent;
-use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
+use DTL\Component\Content\Document\DocumentInterface;
+use DTL\Bundle\ContentBundle\Document\BasePageDocument;
 
+/**
+ * Force the document type
+ *
+ * @author Daniel Leech <daniel@dantleech.com>
+ */
 class DocumentSubscriber implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
@@ -19,12 +26,15 @@ class DocumentSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @param PreSerializeEvent $event
+     */
     public function onPreSerialize(PreSerializeEvent $event)
     {
         $object = $event->getObject();
 
-        if ($object instanceof DocumentInterface) {
-            $event->setType(DocumentInterface::class);
+        if ($object instanceof BasePageDocument) {
         }
     }
 }
+

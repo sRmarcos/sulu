@@ -17,6 +17,7 @@ use PHPCR\NodeInterface;
 use DTL\Component\Content\PhpcrOdm\NamespaceRoleRegistry;
 use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
 use DTL\Component\Content\Document\LocalizationState;
+use DTL\Component\Content\PhpcrOdm\ContentContainer;
 
 /**
  * Base document class.
@@ -94,7 +95,7 @@ abstract class Document implements DocumentInterface
     protected $changed;
 
     /**
-     * @var array Not mapped, populated in an event listener
+     * @var ContentContainer Not mapped, populated in an event listener
      */
     protected $content = array();
 
@@ -122,6 +123,11 @@ abstract class Document implements DocumentInterface
      * @var string
      */
     protected $workflowState;
+
+    public function __construct()
+    {
+        $this->content = new ContentContainer();
+    }
 
     /**
      * {@inheritDoc}
@@ -301,11 +307,11 @@ abstract class Document implements DocumentInterface
      */
     public function setContent($content)
     {
-        $this->content = $content;
+        $this->content->exchangeArray($content);
 
         // TODO: Hack to force the UOW to recalculate the changeset
         //       We could remove this with: https://github.com/doctrine/phpcr-odm/issues/417
-        $this->contentHash = md5(json_encode($content));
+        $this->contentHash = md5(json_encode($content->getArrayCopy()));
     }
 
     /**

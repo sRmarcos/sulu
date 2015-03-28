@@ -35,6 +35,19 @@ class DtlContentExtension extends Extension implements PrependExtensionInterface
                 ),
             ));
         }
+
+        if ($container->hasExtension('jms_serializer')) {
+            $container->prependExtensionConfig('jms_serializer', array(
+                'metadata' => array(
+                    'directories' => array(
+                        array(
+                            'path' => __DIR__ . '/../Resources/config/serializer',
+                            'namespace_prefix' => 'DTL\Bundle\ContentBundle',
+                        ),
+                    ),
+                ),
+            ));
+        }
     }
 
     /**
@@ -53,7 +66,7 @@ class DtlContentExtension extends Extension implements PrependExtensionInterface
         $loader->load('structure.xml');
         $loader->load('controller.xml');
         $loader->load('property.xml');
-        $loader->load('jms_serializer.xml');
+        //$loader->load('jms_serializer.xml');
 
         $compat = $config['compat']['enabled'];
         $loader->load('compat.xml');

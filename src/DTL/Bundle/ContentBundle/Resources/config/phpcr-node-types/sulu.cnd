@@ -5,6 +5,9 @@
 <nsys = 'http://sulu.io/phpcr/system'>
 <cach = 'http://sulu.io/phpcr/cache'>
 
+// legacy
+<i18n = 'http://sulu.io/phpcr/locale'>
+
 // New schema - using primary types
 // [sulu:base] > nt:unstructured
 // [sulu:content] > sulu:base
@@ -12,12 +15,14 @@
 // [sulu:page] > sulu:content
 // [sulu:route] > nt:unstructured
 
-
 // Legacy schema using mixins
 [sulu:base] > mix:referenceable
 mixin abstract noquery
 
 [sulu:content] > sulu:base
+mixin noquery
+
+[sulu:path] > sulu:base
 mixin noquery
 
 [sulu:snippet] > sulu:content
