@@ -51,18 +51,28 @@ class ContentContainer implements \ArrayAccess, \Countable, \IteratorAggregate
      * @param array $content
      * @return array
      */
-    public function mapTypes($content)
+    private function mapTypes($content)
     {
+        $typeMap = array();
         foreach ($content as $key => $value) {
             if (is_array($value) || $value instanceof \Traversable) {
-                $typeMap[$key] = $this->mapTypes($value);
+                if (!count($value)) {
+                    continue;
+                }
+
+                $typeMap[$key] = array('array', $this->getType(reset($value)));
                 continue;
             }
 
-            $typeMap[$key] = is_object($value) ? get_class($value) : gettype($value);
+            $typeMap[$key] = array($this->getType($value), null);
         }
 
         return $typeMap;
+    }
+
+    private function getType($value)
+    {
+        return is_object($value) ? get_class($value) : gettype($value);
     }
 
     /**

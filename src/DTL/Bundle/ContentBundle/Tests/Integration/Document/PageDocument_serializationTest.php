@@ -18,6 +18,7 @@ use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 use Symfony\Component\HttpFoundation\Request;
 use DTL\Component\Content\Document\DocumentInterface;
 use DTL\Component\Content\Document\LocalizationState;
+use DTL\Component\Content\PhpcrOdm\ContentContainer;
 
 class PageDocumentSerializationTest extends SuluTestCase
 {
@@ -45,13 +46,22 @@ class PageDocumentSerializationTest extends SuluTestCase
     public function testDeserialization($data)
     {
         $page = $this->serializer->deserialize($data, PageDocument::class, 'json');
-        var_dump($page->getContent());
-        throw new \InvalidArgumentException('TODO: Content deserialization');
         $this->assertInstanceOf(PageDocument::class, $page);
+        $content = $page->getContent();
+
+        $this->assertInternalType('double', $content['double']);
+        $this->assertInternalType('integer', $content['integer']);
+        $this->assertInstanceOf(PageDocument::class, $content['object']);
+        $this->assertInstanceOf(ContentContainer::class, $content);
+        $this->assertCount(2, $content['arrayOfObjects']);
+        $this->assertContainsOnlyInstancesOf(PageDocument::class, $content['arrayOfObjects']);
     }
 
     private function createPage()
     {
+        $internalLink = new PageDocument();
+        $internalLink->setTitle('Hello');
+
         $page = new PageDocument();
         $page->setTitle('Hello');
         $page->setParent($this->parent);
@@ -60,39 +70,15 @@ class PageDocumentSerializationTest extends SuluTestCase
         $page->setLocale('fr');
         $page->setContent(array(
             'title' => 'Foobar',
-            'object' => new TestObject('hello'),
+            'object' => $internalLink,
+            'arrayOfObjects' => array(
+                $internalLink,
+                $internalLink,
+            ),
+            'integer' => 1234,
+            'double' => 1234.00,
         ));
 
         return $page;
     }
-}
-
-class TestObject
-{
-    private $title;
-    private $data = array(
-        'key' => 'value',
-    );
-
-    public function __construct($title)
-    {
-        $this->title = $title;
-    }
-
-    public function getTitle() 
-    {
-        return $this->title;
-    }
-    
-    public function setTitle($title)
-    {
-        $this->title = $title;
-    }
-
-    public function getData() 
-    {
-        return $this->data;
-    }
-    
-    
 }

@@ -70,5 +70,23 @@ class ContentContainerHandler implements SubscribingHandlerInterface
         array $type,
         Context $context
     ) {
+        $container = new ContentContainer();
+        $typeMap = $data['typeMap'];
+        $content = $data['content'];
+
+        foreach ($content as $key => $value) {
+            $type = $typeMap[$key];
+            $deserialized = $context->accept(
+                $value,
+                array(
+                    'name' => $type[0],
+                    'params' => isset($type[1]) ? array(array('name' => $type[1])) : array()
+                )
+            );
+
+            $container[$key] = $deserialized;
+        }
+
+        return $container;
     }
 }
