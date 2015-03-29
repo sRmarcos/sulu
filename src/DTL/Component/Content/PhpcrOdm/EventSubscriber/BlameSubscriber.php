@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * This file is part of the Sulu CMS.
  *
@@ -7,15 +7,12 @@
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
- 
+
 namespace DTL\Component\Content\PhpcrOdm\EventSubscriber;
 
-use DTL\Bundle\ContentBundle\Document\DocumentName;
-use Doctrine\ODM\PHPCR\DocumentManager;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ODM\PHPCR\Event;
-use PHPCR\Util\UUIDHelper;
 use Sulu\Component\Security\Authentication\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use DTL\Component\Content\Document\DocumentInterface;
@@ -46,7 +43,7 @@ class BlameSubscriber implements EventSubscriber
     {
         return array(
             Event::prePersist,
-            Event::preUpdate
+            Event::preUpdate,
         );
     }
 
@@ -70,10 +67,9 @@ class BlameSubscriber implements EventSubscriber
         $this->handleBlame($event);
     }
 
-
     /**
      * @param LifecycleEventArgs $event
-     * @param boolean $setCreator If we should set the creator (i.e. if this is a new object)
+     * @param boolean            $setCreator If we should set the creator (i.e. if this is a new object)
      */
     private function handleBlame(LifecycleEventArgs $event, $setCreator = false)
     {

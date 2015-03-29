@@ -10,6 +10,12 @@ use DTL\Component\Content\PhpcrOdm\DocumentCacheManager;
 use DTL\Component\Content\Document\PageInterface;
 use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
 
+/**
+ * This subscribers purpose is to cache and manage the PageDocuments
+ * resource locator.
+ *
+ * NOTE: This is potentially very inefficient when used on large trees.
+ */
 class DocumentCacheSubscriber implements EventSubscriberInterface
 {
     private $cacheManager;

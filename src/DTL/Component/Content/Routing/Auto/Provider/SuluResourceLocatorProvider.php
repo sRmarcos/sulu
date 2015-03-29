@@ -8,15 +8,28 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use DTL\Component\Content\Document\PageInterface;
 use Doctrine\ODM\PHPCR\DocumentManager;
 
+/**
+ * Provides the Sulu resource locator for the subject object, or
+ * the subject objects parent.
+ */
 class SuluResourceLocatorProvider implements TokenProviderInterface
 {
+    /**
+     * @var DocumentManager
+     */
     private $documentManager;
 
+    /**
+     * @param DocumentManager $documentManager
+     */
     public function __construct(DocumentManager $documentManager)
     {
         $this->documentManager = $documentManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function provideValue(UriContext $uriContext, $options)
     {
         $subject = $uriContext->getSubjectObject();
@@ -61,6 +74,9 @@ class SuluResourceLocatorProvider implements TokenProviderInterface
         return $value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function configureOptions(OptionsResolverInterface $options)
     {
         $options->setDefaults(array(

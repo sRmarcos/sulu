@@ -364,7 +364,7 @@ abstract class Document implements DocumentInterface
     {
         if (null !== $this->documentNodeHelper) {
             // todo: this should not be mutable, but how can we tell the subscriber not
-            //       to re-set this?
+            //       to re-set this? Answer: Do not put it here.
         }
 
         $this->documentNodeHelper = $documentNodeHelper;

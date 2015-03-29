@@ -20,6 +20,10 @@ use Doctrine\Common\Persistence\Event\ManagerEventArgs;
 use DTL\Component\Content\Document\DocumentInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
+/**
+ * Handles the serialization and deserialization of Content (structure data)
+ * of objects implementing the DocumentInterface.
+ */
 class ContentSerializerSubscriber implements EventSubscriber
 {
     /**
@@ -128,6 +132,11 @@ class ContentSerializerSubscriber implements EventSubscriber
         $this->boundTranslations[$oid][$currentLocale] = $document->getContent();
     }
 
+    /**
+     * Serialize the content data before updating the document
+     *
+     * @param LifecycleEventArgs $event
+     */
     public function preUpdate(LifecycleEventArgs $event)
     {
         $this->prePersist($event);

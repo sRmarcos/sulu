@@ -10,6 +10,9 @@ use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use DTL\Component\Content\Document\DocumentInterface;
 use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
 
+/**
+ * Sulu locale chooser implementation for the PHPCR-ODM
+ */
 class SuluLocaleChooser implements LocaleChooserInterface
 {
     /**
@@ -27,6 +30,11 @@ class SuluLocaleChooser implements LocaleChooserInterface
      */
     private $documentNodeHelper;
 
+    /**
+     * @param RequestAnalyzerInterface $requestAnalyzer
+     * @param WebspaceManagerInterface $webspaceManager
+     * @param DocumentNodeHelper $documentNodeHelper
+     */
     public function __construct(
         RequestAnalyzerInterface $requestAnalyzer,
         WebspaceManagerInterface $webspaceManager,
@@ -74,7 +82,16 @@ class SuluLocaleChooser implements LocaleChooserInterface
         return $currentLocalization->getLocalization();
     }
 
-    private function doGetFallbackLocales($document, ClassMetadata $metadata, $forLocale = null)
+    /**
+     * Return the fallback locales for the given document. If the webspace is available,
+     * return the webspace locales, otherwise return any locales that are available in
+     * the document and which are not the current locale.
+     *
+     * @param DocumentInterface $document
+     * @param ClassMetadata $metadata
+     * @param string $forLocale
+     */
+    private function doGetFallbackLocales(DocumentInterface $document, ClassMetadata $metadata, $forLocale = null)
     {
         $webspace = $this->requestAnalyzer->getWebspace();
 
@@ -105,6 +122,14 @@ class SuluLocaleChooser implements LocaleChooserInterface
         return array_values($locales);
     }
 
+    /**
+     * Return any existing locales which are not the $forLocale
+     *
+     * @param DocumentInterface $document
+     * @param string $forLocale
+     *
+     * @return array
+     */
     private function getOtherLocales(DocumentInterface $document, $forLocale)
     {
         $locales = $this->documentNodeHelper->getLocales($document->getPhpcrNode());
@@ -114,7 +139,15 @@ class SuluLocaleChooser implements LocaleChooserInterface
 
     }
 
+    /**
+     * Return parent localizatios for the given Sulu Localization object.
+     *
+     * @param Localization $localization
+     *
+     * @return array
+     */
     private function getParentLocalizations(Localization $localization)
+
     {
         $locales = array();
 
@@ -126,6 +159,14 @@ class SuluLocaleChooser implements LocaleChooserInterface
         return $locales;
     }
 
+    /**
+     * Recursively return all child localizations
+     *
+     * @param Localization $localization
+     * @param array $locales
+     *
+     * @return array
+     */
     private function getChildLocalizations(Localization $localization, $locales = array())
     {
         $childLocalizations = $localization->getChildren();
@@ -142,7 +183,7 @@ class SuluLocaleChooser implements LocaleChooserInterface
         return $locales;
     }
 
-    // The following methods  are required by the interface but are infact not required.
+    // The following methods  are required by the interface but are not required.
     // See: https://github.com/doctrine/phpcr-odm/issues/604
     public function setLocale($locale) {}
     public function getDefaultLocalesOrder() {}
