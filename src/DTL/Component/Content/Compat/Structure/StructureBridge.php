@@ -429,7 +429,7 @@ class StructureBridge implements StructureInterface
                 );
             }
 
-            $result = array_merge($this->document->getContent(), $result);
+            $result = array_merge($this->document->getContent()->getArrayCopy(), $result);
 
             return $result;
         }

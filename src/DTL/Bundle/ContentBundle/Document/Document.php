@@ -295,11 +295,17 @@ abstract class Document implements DocumentInterface
     }
 
     /**
+     * TODO: We clone this to avoid state changes and confusion with the ContentSerializer.
+     *       Updating the content serializer to be localization aware might fix this hack
      * {@inheritDoc}
      */
     public function getContent() 
     {
-        return $this->content;
+        if (!$this->content) {
+            return new ContentContainer();
+        }
+
+        return clone $this->content;
     }
 
     /**
@@ -308,14 +314,11 @@ abstract class Document implements DocumentInterface
     public function setContent($content)
     {
         if ($content instanceof ContentContainer) {
-            $content = $content->getArrayCopy();
+            $this->content = $content;
+            return;
         }
 
-        if (null === $this->content) {
-            $this->content = new ContentContainer();
-        }
-
-        $this->content->exchangeArray($content);
+        $this->content = new ContentContainer($content);
 
         // TODO: Hack to force the UOW to recalculate the changeset
         //       We could remove this with: https://github.com/doctrine/phpcr-odm/issues/417

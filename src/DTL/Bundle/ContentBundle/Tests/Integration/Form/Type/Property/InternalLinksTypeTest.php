@@ -29,6 +29,7 @@ class InternalLinksTypeTest extends TypeTestCase
         $document->setParent($parent);
         $document->setResourceSegment('contact');
         $document->setStructureType('contact');
+        $document->setLocale('de');
         $this->getDm()->persist($document);
         $this->document1 = $document;
 
@@ -37,6 +38,7 @@ class InternalLinksTypeTest extends TypeTestCase
         $document->setParent($parent);
         $document->setResourceSegment('contact-2');
         $document->setStructureType('contact');
+        $document->setLocale('de');
         $this->document2 = $document;
         $this->getDm()->persist($document);
         $this->getDm()->flush();
