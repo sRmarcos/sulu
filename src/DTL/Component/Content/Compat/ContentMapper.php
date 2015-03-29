@@ -18,7 +18,6 @@ use DTL\Component\Content\Document\LocalizationState;
 use Sulu\Component\Content\Exception\ResourceLocatorNotFoundException;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 use Sulu\Component\Content\BreadcrumbItem;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ContentMapper implements ContentMapperInterface
 {
@@ -48,11 +47,6 @@ class ContentMapper implements ContentMapperInterface
     private $sessionManager;
 
     /**
-     * @var UrlGeneratorInterface
-     */
-    private $urlGenerator;
-
-    /**
      * @param DataNormalizer $dataNormalizer
      * @param FormFactoryInterface $formFactory
      */
@@ -61,8 +55,7 @@ class ContentMapper implements ContentMapperInterface
         FormFactoryInterface $formFactory,
         DocumentManager $documentManager,
         StructureManager $structureManager,
-        SessionManagerInterface $sessionManager,
-        UrlGeneratorInterface $urlGenerator
+        SessionManagerInterface $sessionManager
     )
     {
         $this->dataNormalizer = $dataNormalizer;
@@ -70,7 +63,6 @@ class ContentMapper implements ContentMapperInterface
         $this->documentManager = $documentManager;
         $this->structureManager = $structureManager;
         $this->sessionManager = $sessionManager;
-        $this->urlGenerator = $urlGenerator;
     }
 
     public function save(
@@ -220,7 +212,7 @@ class ContentMapper implements ContentMapperInterface
         public function loadByNode(
             NodeInterface $node,
             $locale,
-            $webspaceKey,
+            $webspaceKey = null,
             $excludeGhost = true,
             $loadGhostContent = false,
             $excludeShadow = true
@@ -372,7 +364,7 @@ class ContentMapper implements ContentMapperInterface
             return $items;
         }
 
-        public function delete($uuid, $webspaceKey)
+        public function delete($uuid, $webspaceKey, $dereference = false)
         {
             $document = $this->getDocumentById($uuid);
             if ($document->getWebspaceKey() !== $webspaceKey) {
@@ -590,7 +582,6 @@ class ContentMapper implements ContentMapperInterface
         {
             $structureBridge = $this->structureManager->getStructure($document->getStructureType(), $document->getDocumentType());
             $structureBridge->setDocument($document);
-            $structureBridge->setUrlGenerator($this->urlGenerator);
 
             return $structureBridge;
         }

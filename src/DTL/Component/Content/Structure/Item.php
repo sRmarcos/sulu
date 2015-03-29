@@ -80,8 +80,8 @@ class Item
     {
         if (!isset($this->children[$name])) {
             throw new \InvalidArgumentException(sprintf(
-                'Unknown child "%s" in structure loaded from: "%s". Children: "%s"',
-                 $name, $this->resource, implode('", "', array_keys($this->children))
+                'Unknown child "%s" in structure "%s" loaded from: "%s". Children: "%s"',
+                 $name, $this->name, $this->resource, implode('", "', array_keys($this->children))
             ));
         }
 

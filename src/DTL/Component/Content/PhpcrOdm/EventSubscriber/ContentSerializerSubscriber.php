@@ -82,6 +82,7 @@ class ContentSerializerSubscriber implements EventSubscriber
         }
 
         $data = $this->serializer->deserialize($document);
+
         $document->setContent($data);
     }
 

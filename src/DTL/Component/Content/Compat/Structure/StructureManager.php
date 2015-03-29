@@ -9,6 +9,7 @@ use DTL\Component\Content\Structure\Factory\StructureFactoryInterface;
 use DTL\Component\Content\Compat\Structure\StructureBridge;
 use Sulu\Component\Content\Structure as LegacyStructure;
 use DTL\Component\Content\Structure\Structure;
+use DTL\Component\Content\Routing\PageUrlGenerator;
 
 class StructureManager implements StructureManagerInterface
 {
@@ -18,11 +19,21 @@ class StructureManager implements StructureManagerInterface
     private $structureFactory;
 
     /**
-     * @param StructureFactoryInterface $structureFactory
+     * @var PageUrlGenerator
      */
-    public function __construct(StructureFactoryInterface $structureFactory)
+    private $urlGenerator;
+
+    /**
+     * @param StructureFactoryInterface $structureFactory
+     * @param PageUrlGenerator
+     */
+    public function __construct(
+        StructureFactoryInterface $structureFactory,
+        PageUrlGenerator $urlGenerator
+    )
     {
         $this->structureFactory = $structureFactory;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -34,7 +45,7 @@ class StructureManager implements StructureManagerInterface
     public function getStructure($key, $type = 'page')
     {
         $structure = $this->structureFactory->getStructure($type, $key);
-        $compatStructure = new StructureBridge($structure);
+        $compatStructure = new StructureBridge($structure, $this->structureFactory, $this->urlGenerator);
 
         return $compatStructure;
     }
@@ -48,7 +59,7 @@ class StructureManager implements StructureManagerInterface
     {
         $compatStructures = array();
         foreach ($this->structureFactory->getStructures($type) as $structure) {
-            $compatStructures[] = new StructureBridge($structure);
+            $compatStructures[] = new StructureBridge($structure, $this->structureFactory);
         }
 
         return $compatStructures;

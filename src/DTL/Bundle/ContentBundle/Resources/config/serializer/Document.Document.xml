@@ -7,5 +7,6 @@
         <property name="documentNodeHelper" exclude="true" />
         <property name="node" exclude="true" />
         <property name="content" type="DTL\Component\Content\PhpcrOdm\ContentContainer" />
+        <property name="requestedLocale" type="string" />
     </class>
 </serializer>

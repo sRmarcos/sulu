@@ -85,7 +85,7 @@ class ContentContainer implements \ArrayAccess, \Countable, \IteratorAggregate
         return $this->typeMap;
     }
 
-    public function exchangeArray($newArray)
+    public function exchangeArray(array $newArray)
     {
         $this->content = $newArray;
     }

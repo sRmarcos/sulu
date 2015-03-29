@@ -98,10 +98,10 @@ class ContentMapper_saveTest extends BaseTestCase
         unset($frenchContent['title'], $frenchContent['url']);
 
         $document = $this->documentManager->findTranslation(null, $structure->getUuid(), 'en');
-        $this->assertEquals($englishContent, $document->getContent());
+        $this->assertEquals($englishContent, $document->getContent()->getArrayCopy());
 
         $document = $this->documentManager->findTranslation(null, $structure->getUuid(), 'de');
-        $this->assertEquals($frenchContent, $document->getContent());
+        $this->assertEquals($frenchContent, $document->getContent()->getArrayCopy());
     }
 
     /**

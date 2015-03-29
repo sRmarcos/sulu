@@ -19,8 +19,9 @@ use DTL\Component\Content\Document\WorkflowState;
 use Sulu\Component\Content\StructureType;
 use DTL\Component\Content\Structure\Item;
 use DTL\Component\Content\Structure\Section;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use JMS\Serializer\Annotation\Exclude;
+use DTL\Component\Content\Routing\PageUrlGenerator;
+use DTL\Component\Content\Structure\Factory\StructureFactory;
 
 class StructureBridge implements StructureInterface
 {
@@ -30,29 +31,34 @@ class StructureBridge implements StructureInterface
     private $structure;
 
     /**
-     * @Exclude
      * @var Document
      */
     private $document;
 
     /**
-     * @Exclude
-     * @var UrlGeneratorInterface
+     * @var PageUrlGenerator
      */
     private $urlGenerator;
 
     /**
+     * @var StructureFactory
+     */
+    private $structureFactory;
+
+    /**
      * @param Structure $structure
      * @param DocumentInterface $document
-     * @param UrlGeneratorInterface $urlGenerator
+     * @param PageUrlGenerator $urlGenerator
      */
     public function __construct(
         Structure $structure,
-        DocumentInterface $document = null,
-        UrlGeneratorInterface $urlGenerator = null
+        StructureFactory $structureFactory,
+        PageUrlGenerator $urlGenerator,
+        DocumentInterface $document = null
     )
     {
         $this->structure = $structure;
+        $this->structureFactory = $structureFactory;
         $this->document = $document;
         $this->urlGenerator = $urlGenerator;
     }
@@ -66,9 +72,9 @@ class StructureBridge implements StructureInterface
     }
 
     /**
-     * @param UrlGeneratorInterface $urlGenerator
+     * @param PageUrlGenerator $urlGenerator
      */
-    public function setUrlGenerator(UrlGeneratorInterface $urlGenerator)
+    public function setUrlGenerator(PageUrlGenerator $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
     }
@@ -272,7 +278,7 @@ class StructureBridge implements StructureInterface
         $children = array();
 
         foreach ($this->getDocument()->getChildren() as $child) {
-            $children[] = new $this($this->structure, $child, $this->urlGenerator);
+            $children[] = $this->documentToStructure($child);
         }
 
         return $children;
@@ -628,6 +634,14 @@ class StructureBridge implements StructureInterface
             $propertyBridge->addTag(new PropertyTag($tag['name'], $tag['priority'], $tag['attributes']));
         }
 
+        // map value
+
+        $content = $this->document->getContent();
+        if ($content->offsetExists($name)) {
+            $data = $content->getArrayCopy();
+            $propertyBridge->setValue($this->normalizeData($data[$name]));
+        }
+
         return $propertyBridge;
     }
 
@@ -668,5 +682,45 @@ class StructureBridge implements StructureInterface
         throw new \InvalidArgumentException(sprintf(
             'Method "%s" is not yet implemented', $method
         ));
+    }
+
+    private function normalizeData(array $data = null)
+    {
+        if (null === $data) {
+            return null;
+        }
+
+        if (false === is_array($data)) {
+            return $this->normalizeValue($data);
+        }
+
+        foreach ($data as &$value) {
+            if (is_array($value)) {
+                foreach ($value as $childKey => $childValue) {
+                    $data[$childKey] = $this->normalizeData($childValue);
+                }
+            }
+
+            $value = $this->normalizeValue($value);
+        }
+
+        return $data;
+    }
+
+    private function normalizeValue($value)
+    {
+        if ($value instanceof DocumentInterface) {
+            return $this->documentToStructure($value);
+        }
+
+        return $value;
+    }
+
+    private function documentToStructure(DocumentInterface $document)
+    {
+        $structure = $this->structureFactory->getStructure($document->getDocumentType(), $document->getStructureType());
+
+        return new $this($structure, $this->structureFactory, $this->urlGenerator, $document);
+
     }
 }

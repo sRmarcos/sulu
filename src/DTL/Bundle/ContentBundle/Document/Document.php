@@ -97,7 +97,7 @@ abstract class Document implements DocumentInterface
     /**
      * @var ContentContainer Not mapped, populated in an event listener
      */
-    protected $content = array();
+    protected $content;
 
     /**
      * @var string Hash of the content
@@ -307,6 +307,14 @@ abstract class Document implements DocumentInterface
      */
     public function setContent($content)
     {
+        if ($content instanceof ContentContainer) {
+            $content = $content->getArrayCopy();
+        }
+
+        if (null === $this->content) {
+            $this->content = new ContentContainer();
+        }
+
         $this->content->exchangeArray($content);
 
         // TODO: Hack to force the UOW to recalculate the changeset

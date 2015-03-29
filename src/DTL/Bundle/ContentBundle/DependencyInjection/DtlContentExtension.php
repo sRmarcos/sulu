@@ -44,6 +44,10 @@ class DtlContentExtension extends Extension implements PrependExtensionInterface
                             'path' => __DIR__ . '/../Resources/config/serializer',
                             'namespace_prefix' => 'DTL\Bundle\ContentBundle',
                         ),
+                        array(
+                            'path' => __DIR__ . '/../Resources/config/serializer',
+                            'namespace_prefix' => 'DTL\Component\Content',
+                        ),
                     ),
                 ),
             ));

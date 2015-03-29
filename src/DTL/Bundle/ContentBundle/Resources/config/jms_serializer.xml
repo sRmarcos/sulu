@@ -9,10 +9,14 @@
     </parameters>
 
     <services>
+        <!-- See compat.xml for legacy serializer services -->
+        <!-- See the Resources/config/serializer directory for serialization mappings -->
 
+        <!-- Document content serializer handler -->
         <service id="dtl_content.serializer.handler.document" class="%dtl_content.serializer.handler.content_container.class%">
             <tag name="jms_serializer.subscribing_handler"/>
         </service>
+
 
     </services>
 </container>

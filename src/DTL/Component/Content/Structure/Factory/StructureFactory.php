@@ -69,6 +69,13 @@ class StructureFactory implements StructureFactoryInterface
             ));
         }
 
+        if (!is_string($structureType)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Expected string for structureType, got: %s',
+                is_object($structureType) ? get_class($structureType) : gettype($structureType)
+            ));
+        }
+
         $cachePath = sprintf(
             '%s/%s%s', 
             $this->cachePath,

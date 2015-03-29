@@ -18,6 +18,7 @@ use DTL\Component\Content\PhpcrOdm\ContentContainer;
 use JMS\Serializer\JsonDeserializationVisitor;
 
 /**
+ * Handle serializeation and deserialization of document content
  */
 class ContentContainerHandler implements SubscribingHandlerInterface
 {
@@ -51,6 +52,7 @@ class ContentContainerHandler implements SubscribingHandlerInterface
         array $type,
         Context $context
     ) {
+        $array = $container->getArrayCopy();
         $container->preSerialize();
         return $context->accept(array(
             'typeMap' => $container->getTypeMap(),
@@ -72,6 +74,11 @@ class ContentContainerHandler implements SubscribingHandlerInterface
     ) {
         $container = new ContentContainer();
         $typeMap = $data['typeMap'];
+
+        if (!isset($data['content'])) {
+            return $container;
+        }
+
         $content = $data['content'];
 
         foreach ($content as $key => $value) {

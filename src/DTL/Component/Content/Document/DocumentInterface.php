@@ -13,6 +13,7 @@ namespace DTL\Component\Content\Document;
 use Doctrine\ODM\PHPCR\ChildrenCollection;
 use DTL\Component\Content\PhpcrOdm\NamespaceRoleRegistry;
 use DTL\Component\Content\PhpcrOdm\DocumentNodeHelper;
+use DTL\Component\Content\PhpcrOdm\ContentContainer;
 
 /**
  * Documents are are the base content units in Sulu all
@@ -172,7 +173,7 @@ interface DocumentInterface
     /**
      * Return the structure content for this document
      *
-     * @return array
+     * @return ContentContainer
      */
     public function getContent();
 
