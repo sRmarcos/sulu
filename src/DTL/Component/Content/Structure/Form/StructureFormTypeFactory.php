@@ -16,6 +16,7 @@ use Symfony\Component\Form\ResolvedFormType;
 use DTL\Component\Content\Structure\Factory\StructureFactory;
 use Symfony\Component\Form\FormFactoryInterface;
 use DTL\Component\Content\Document\DocumentInterface;
+use DTL\Component\Content\PhpcrOdm\ContentContainer;
 
 /**
  * Creates forms for structures using the Metadata from
@@ -70,6 +71,7 @@ class StructureFormTypeFactory
 
         $builder = $this->formFactory->createNamedBuilder('content', 'form', null, array(
             'auto_initialize' => false, // auto initialize should only be for root nodes
+            'data_class' => ContentContainer::class
         ));
 
         foreach ($structure->getChildren() as $name => $property) {

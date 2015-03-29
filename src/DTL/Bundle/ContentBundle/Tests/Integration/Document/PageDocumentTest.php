@@ -18,6 +18,7 @@ use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 use Symfony\Component\HttpFoundation\Request;
 use DTL\Component\Content\Document\DocumentInterface;
 use DTL\Component\Content\Document\LocalizationState;
+use DTL\Component\Content\PhpcrOdm\ContentContainer;
 
 class PageDocumentTest extends SuluTestCase
 {
@@ -96,10 +97,15 @@ class PageDocumentTest extends SuluTestCase
 
         foreach ($data as $field => $expectedValue) {
             $getter = 'get' . $field;
+            $actualValue = $document->{$getter}();
+
+            if ($actualValue instanceof ContentContainer) {
+                $actualValue = $actualValue->getArrayCopy();
+            }
 
             $this->assertEquals(
                 $expectedValue,
-                $document->{$getter}(),
+                $actualValue,
                 sprintf('Field "%s" is correctly mapped', $field)
             );
         }

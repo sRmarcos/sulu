@@ -32,7 +32,7 @@ class ContentContainer implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     private $content = array();
 
-    public function __construct(array $content = array())
+    final public function __construct(array $content = array())
     {
         $this->content = $content;
     }
@@ -43,36 +43,6 @@ class ContentContainer implements \ArrayAccess, \Countable, \IteratorAggregate
     public function preSerialize()
     {
         $this->typeMap = $this->mapTypes($this->getArrayCopy());
-    }
-
-    /**
-     * Recursively map the type of each content
-     *
-     * @param array $content
-     * @return array
-     */
-    private function mapTypes($content)
-    {
-        $typeMap = array();
-        foreach ($content as $key => $value) {
-            if (is_array($value) || $value instanceof \Traversable) {
-                if (!count($value)) {
-                    continue;
-                }
-
-                $typeMap[$key] = array('array', $this->getType(reset($value)));
-                continue;
-            }
-
-            $typeMap[$key] = array($this->getType($value), null);
-        }
-
-        return $typeMap;
-    }
-
-    private function getType($value)
-    {
-        return is_object($value) ? get_class($value) : gettype($value);
     }
 
     /**
@@ -100,7 +70,7 @@ class ContentContainer implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function offsetGet($offset)
     {
-        return $this->content[$offset];
+        return isset($this->content[$offset]) ? $this->content[$offset] : null;
     }
 
     /**
@@ -142,5 +112,43 @@ class ContentContainer implements \ArrayAccess, \Countable, \IteratorAggregate
     {
         return new \ArrayIterator($this->content);
     }
+    /**
+     * Recursively map the type of each content
+     *
+     * @param array $content
+     * @return array
+     */
+    private function mapTypes($content)
+    {
+        $typeMap = array();
+        foreach ($content as $key => $value) {
+            if (is_array($value) || $value instanceof \Traversable) {
+                if (!count($value)) {
+                    continue;
+                }
 
+                $typeMap[$key] = array('array', $this->getType(reset($value)));
+                continue;
+            }
+
+            $typeMap[$key] = array($this->getType($value), null);
+        }
+
+        return $typeMap;
+    }
+
+    private function getType($value)
+    {
+        return is_object($value) ? get_class($value) : gettype($value);
+    }
+
+    public function __get($field)
+    {
+        return $this->offsetGet($field);
+    }
+
+    public function __set($field, $value)
+    {
+        return $this->offsetSet($field, $value);
+    }
 }

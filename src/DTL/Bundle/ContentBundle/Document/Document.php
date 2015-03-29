@@ -95,7 +95,7 @@ abstract class Document implements DocumentInterface
     protected $changed;
 
     /**
-     * @var ContentContainer Not mapped, populated in an event listener
+     * @var ContentContainer
      */
     protected $content;
 
@@ -123,11 +123,6 @@ abstract class Document implements DocumentInterface
      * @var string
      */
     protected $workflowState;
-
-    public function __construct()
-    {
-        $this->content = new ContentContainer();
-    }
 
     /**
      * {@inheritDoc}
@@ -295,16 +290,13 @@ abstract class Document implements DocumentInterface
     }
 
     /**
-     * TODO: We clone this to avoid state changes and confusion with the ContentSerializer.
-     *       Updating the content serializer to be localization aware might fix this hack
      * {@inheritDoc}
      */
     public function getContent() 
     {
-        if (!$this->content) {
-            return new ContentContainer();
-        }
+        $this->initContentContainer();
 
+        // clone to avoid state change
         return clone $this->content;
     }
 
@@ -313,12 +305,13 @@ abstract class Document implements DocumentInterface
      */
     public function setContent($content)
     {
+        $this->initContentContainer();
+
         if ($content instanceof ContentContainer) {
-            $this->content = $content;
-            return;
+            $content = $content->getArrayCopy();
         }
 
-        $this->content = new ContentContainer($content);
+        $this->content->exchangeArray($content);
 
         // TODO: Hack to force the UOW to recalculate the changeset
         //       We could remove this with: https://github.com/doctrine/phpcr-odm/issues/417
@@ -478,5 +471,18 @@ abstract class Document implements DocumentInterface
         }
 
         return $this->documentNodeHelper;
+    }
+
+    /**
+     * Initialize the content container if it is null - the constructor cannot
+     * be used because Doctrine uses the Instantiator to instantiate the class.
+     * The instantiator bypasses the constructor.
+     *
+     */
+    private function initContentContainer()
+    {
+        if (null === $this->content) {
+            $this->content = new ContentContainer();
+        }
     }
 }

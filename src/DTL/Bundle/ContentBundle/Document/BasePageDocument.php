@@ -80,7 +80,6 @@ abstract class BasePageDocument extends Document implements PageInterface
 
     public function __construct()
     {
-        parent::__construct();
         $this->workflowState = WorkflowState::TEST;
         $this->routes = new ArrayCollection();
     }

@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template.xsd">
+
+    <key>internal_links</key>
+
+    <view>internal_links.html.twig</view>
+    <controller>Controller</controller>
+    <cacheLifetime>2400</cacheLifetime>
+
+    <properties>
+        <property name="title" type="text_line">
+            <tag name="sulu.rlp.part" />
+        </property>
+        <property name="internal_links" type="internal_links"/>
+    </properties>
+</template>
+
