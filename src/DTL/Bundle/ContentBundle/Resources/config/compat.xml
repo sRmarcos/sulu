@@ -30,7 +30,7 @@
         </service>
 
         <!-- Serializer -->
-        <service id="dtl_content.compat.serializer.structure_bridge_handler" class="DTL\Component\Content\Compat\Serializer\StructureBridgeHandler">
+        <service id="dtl_content.compat.serializer.structure_bridge_handler" class="DTL\Component\Content\Compat\Serializer\PageBridgeHandler">
             <argument type="service" id="dtl_content.routing.url_generator.page" />
             <argument type="service" id="dtl_content.structure.factory" />
             <tag name="jms_serializer.subscribing_handler"/>

@@ -153,4 +153,16 @@ class Item
 
         return ucfirst($this->name);
     }
+
+    public function getParameter($name)
+    {
+        if (!isset($this->parameters[$name])) {
+            throw new \InvalidArgumentException(sprintf(
+                'Unknown parameter "%s", known parameters: "%s"',
+                $name, implode('", "', array_keys($this->parameters))
+            ));
+        }
+
+        return $this->parameters[$name];
+    }
 }

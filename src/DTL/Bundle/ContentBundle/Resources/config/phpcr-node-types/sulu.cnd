@@ -25,6 +25,9 @@ mixin noquery
 [sulu:path] > sulu:base
 mixin noquery
 
+[sulu:route] > sulu:base
+mixin noquery
+
 [sulu:snippet] > sulu:content
 mixin noquery
 

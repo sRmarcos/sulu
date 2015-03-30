@@ -15,15 +15,15 @@ use JMS\Serializer\GraphNavigator;
 use JMS\Serializer\JsonSerializationVisitor;
 use JMS\Serializer\Context;
 use JMS\Serializer\JsonDeserializationVisitor;
-use DTL\Component\Content\Compat\Structure\StructureBridge;
 use DTL\Component\Content\Routing\PageUrlGenerator;
 use DTL\Component\Content\Structure\Factory\StructureFactory;
 use DTL\Bundle\ContentBundle\Document\PageDocument;
+use DTL\Component\Content\Compat\Structure\PageBridge;
 
 /**
- * Handle serializeation and deserialization of the StructureBridge
+ * Handle serializeation and deserialization of the PageBridge
  */
-class StructureBridgeHandler implements SubscribingHandlerInterface
+class PageBridgeHandler implements SubscribingHandlerInterface
 {
     private $urlGenerator;
     private $structureFactory;
@@ -43,13 +43,13 @@ class StructureBridgeHandler implements SubscribingHandlerInterface
             array(
                 'direction' => GraphNavigator::DIRECTION_SERIALIZATION,
                 'format' => 'json',
-                'type' => StructureBridge::class,
+                'type' => PageBridge::class,
                 'method' => 'doSerialize',
             ),
             array(
                 'direction' => GraphNavigator::DIRECTION_DESERIALIZATION,
                 'format' => 'json',
-                'type' => StructureBridge::class,
+                'type' => PageBridge::class,
                 'method' => 'doDeserialize',
             ),
         );
@@ -63,11 +63,11 @@ class StructureBridgeHandler implements SubscribingHandlerInterface
      */
     public function doSerialize(
         JsonSerializationVisitor $visitor,
-        StructureBridge $bridge,
+        PageBridge $bridge,
         array $type,
         Context $context
     ) {
-        $refl = new \ReflectionClass(StructureBridge::class);
+        $refl = new \ReflectionClass(PageBridge::class);
         $documentProperty = $refl->getProperty('document');
         $structureProperty = $refl->getProperty('structure');
         $documentProperty->setAccessible(true);
@@ -98,7 +98,7 @@ class StructureBridgeHandler implements SubscribingHandlerInterface
         $document = $context->accept($data['document'], array('name' => PageDocument::class));
         $structure = $this->structureFactory->getStructure('page', $data['structure']);
 
-        $bridge = new StructureBridge($structure, $this->structureFactory, $this->urlGenerator, $document);
+        $bridge = new PageBridge($structure, $this->structureFactory, $this->urlGenerator, $document);
 
         // filthy hack to set the Visitor::$result to null and force the
         // serializer to return the Bridge and not the Document
@@ -107,4 +107,3 @@ class StructureBridgeHandler implements SubscribingHandlerInterface
         return $bridge;
     }
 }
-

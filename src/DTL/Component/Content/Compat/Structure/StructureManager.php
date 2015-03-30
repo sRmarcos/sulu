@@ -42,10 +42,10 @@ class StructureManager implements StructureManagerInterface
      * @param string $type
      * @return StructureInterface
      */
-    public function getStructure($key, $type = 'page')
+    public function getStructure($key, $type = LegacyStructure::TYPE_PAGE)
     {
         $structure = $this->structureFactory->getStructure($type, $key);
-        $compatStructure = new StructureBridge($structure, $this->structureFactory, $this->urlGenerator);
+        $compatStructure = $this->createBridge($structure, $type);
 
         return $compatStructure;
     }
@@ -59,7 +59,7 @@ class StructureManager implements StructureManagerInterface
     {
         $compatStructures = array();
         foreach ($this->structureFactory->getStructures($type) as $structure) {
-            $compatStructures[] = new StructureBridge($structure, $this->structureFactory);
+            $compatStructures[] = $this->createBridge($structure);
         }
 
         return $compatStructures;
@@ -114,4 +114,17 @@ class StructureManager implements StructureManagerInterface
     {
     }
 
+    private function createBridge(Structure $structure, $type)
+    {
+        switch ($type) {
+            case 'homepage':
+            case 'page':
+                return new PageBridge($structure, $this->structureFactory, $this->urlGenerator);
+        }
+
+        throw new \InvalidArgumentException(sprintf(
+            'Do not know how to create new structure of type "%s"',
+            $type
+        ));
+    }
 }
