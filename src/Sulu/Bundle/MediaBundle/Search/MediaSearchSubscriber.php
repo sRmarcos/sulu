@@ -76,7 +76,7 @@ class MediaSearchSubscriber implements EventSubscriberInterface
         $document = $e->getDocument();
         $subject = $e->getSubject();
 
-        if (false === $metadata->reflection->isSubclassOf('Sulu\Component\Content\Structure')) {
+        if (false === $metadata->reflection->isSubclassOf('Sulu\Component\Content\Compat\Structure')) {
             return;
         }
 
