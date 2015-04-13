@@ -13,12 +13,12 @@ namespace Sulu\Bundle\SearchBundle\Search\Metadata;
 use Massive\Bundle\SearchBundle\Search\Factory;
 use Massive\Bundle\SearchBundle\Search\Metadata\IndexMetadataInterface;
 use Metadata\Driver\DriverInterface;
-use Sulu\Component\Content\StructureInterface;
+use Sulu\Component\Content\Compat\StructureInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Sulu\Bundle\SearchBundle\Search\SuluSearchEvents;
 use Sulu\Bundle\SearchBundle\Search\Event\StructureMetadataLoadEvent;
 use Sulu\Component\Content\Block\BlockProperty;
-use Sulu\Component\Content\PropertyInterface;
+use Sulu\Component\Content\Compat\PropertyInterface;
 use Metadata\ClassMetadata;
 use Massive\Bundle\SearchBundle\Search\Metadata\ComplexMetadata;
 

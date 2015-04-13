@@ -11,10 +11,10 @@
 namespace Sulu\Bundle\SearchBundle\Tests\Functional;
 
 use Sulu\Component\Content\Mapper\ContentMapperInterface;
-use Sulu\Component\Content\Structure;
+use Sulu\Component\Content\Compat\Structure;
 use Symfony\Component\Filesystem\Filesystem;
 use Sulu\Bundle\SearchBundle\Tests\Fixtures\DefaultStructureCache;
-use Sulu\Component\Content\StructureInterface;
+use Sulu\Component\Content\Compat\StructureInterface;
 use Sulu\Bundle\TestBundle\Testing\SuluTestCase;
 
 class BaseTestCase extends SuluTestCase

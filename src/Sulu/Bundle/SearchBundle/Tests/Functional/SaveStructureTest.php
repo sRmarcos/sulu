@@ -11,9 +11,9 @@
 namespace Sulu\Bundle\SearchBundle\Tests\Functional;
 
 use Sulu\Bundle\SearchBundle\Tests\Fixtures\SecondStructureCache;
-use Sulu\Component\Content\StructureInterface;
-use Sulu\Component\Content\PropertyTag;
-use Sulu\Component\Content\Structure;
+use Sulu\Component\Content\Compat\StructureInterface;
+use Sulu\Component\Content\Compat\PropertyTag;
+use Sulu\Component\Content\Compat\Structure;
 use Sulu\Component\Content\Mapper\ContentMapperRequest;
 
 class SaveStructureTest extends BaseTestCase
@@ -37,7 +37,7 @@ class SaveStructureTest extends BaseTestCase
 
         // ensure metadataload listener was called
         $metadataListener = $this->getContainer()->get('structure_metadata_load_listener');
-        $this->assertInstanceOf('Sulu\Component\Content\StructureInterface', $metadataListener->structure);
+        $this->assertInstanceOf('Sulu\Component\Content\Compat\StructureInterface', $metadataListener->structure);
         $this->assertInstanceOf('Massive\Bundle\SearchBundle\Search\Metadata\IndexMetadata', $metadataListener->indexMetadata);
     }
 

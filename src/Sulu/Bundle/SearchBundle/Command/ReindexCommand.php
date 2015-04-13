@@ -14,7 +14,7 @@ use Jackalope\Query\Row;
 use Massive\Bundle\SearchBundle\Search\SearchManagerInterface;
 use PHPCR\SessionInterface;
 use Sulu\Component\Content\Mapper\ContentMapperInterface;
-use Sulu\Component\Content\Structure;
+use Sulu\Component\Content\Compat\Structure;
 use Sulu\Component\Util\SuluNodeHelper;
 use Sulu\Component\Webspace\Manager\WebspaceManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;

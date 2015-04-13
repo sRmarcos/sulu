@@ -10,7 +10,7 @@
 
 namespace Sulu\Bundle\SearchBundle\Search\Event;
 
-use Sulu\Component\Content\StructureInterface;
+use Sulu\Component\Content\Compat\StructureInterface;
 use Massive\Bundle\SearchBundle\Search\Metadata\IndexMetadata;
 use Symfony\Component\EventDispatcher\Event;
 
