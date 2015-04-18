@@ -35,6 +35,7 @@ use Sulu\Bundle\TestBundle\Testing\SuluTestCase;
 use Sulu\Component\Content\Document\WorkflowStage;
 use Sulu\Component\Security\Authentication\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Sulu\Component\DocumentManager\Exception\DocumentNotFoundException;
 
 /**
  * tests content mapper with tree strategy and phpcr mapper
@@ -1174,18 +1175,6 @@ class ContentMapperTest extends SuluTestCase
         $child = $this->mapper->save($data[2], 'overview', 'sulu_io', 'de', 1, true, null, $root->getUuid());
         $subChild = $this->mapper->save($data[3], 'overview', 'sulu_io', 'de', 1, true, null, $child->getUuid());
 
-        $this->eventDispatcher->expects($this->at(0))
-            ->method('dispatch')
-            ->with(
-                $this->equalTo(ContentEvents::NODE_PRE_DELETE),
-                $this->isInstanceOf('Sulu\Component\Content\Event\ContentNodeDeleteEvent')
-            );
-        $this->eventDispatcher->expects($this->at(1))
-            ->method('dispatch')
-            ->with(
-                $this->equalTo(ContentEvents::NODE_POST_DELETE),
-                $this->isInstanceOf('Sulu\Component\Content\Event\ContentNodeDeleteEvent')
-            );
         // delete /news/test-2/test-1
         $this->mapper->delete($child->getUuid(), 'sulu_io');
 
@@ -1193,13 +1182,13 @@ class ContentMapperTest extends SuluTestCase
         try {
             $this->mapper->load($child->getUuid(), 'sulu_io', 'de');
             $this->assertTrue(false, 'Node should not exists');
-        } catch (ItemNotFoundException $ex) {
+        } catch (DocumentNotFoundException $ex) {
         }
 
         try {
             $this->mapper->load($subChild->getUuid(), 'sulu_io', 'de');
             $this->assertTrue(false, 'Node should not exists');
-        } catch (ItemNotFoundException $ex) {
+        } catch (DocumentNotFoundException $ex) {
         }
 
         $result = $this->mapper->loadByParent($root->getUuid(), 'sulu_io', 'de');
@@ -1230,7 +1219,8 @@ class ContentMapperTest extends SuluTestCase
     {
         // default state TEST
         $data1 = array(
-            'title' => 't1'
+            'title' => 't1',
+            'url' => '/url',
         );
         $data1 = $this->mapper->save($data1, 'overview', 'sulu_io', 'de', 1);
         $this->assertEquals(StructureInterface::STATE_TEST, $data1->getNodeState());
@@ -1239,6 +1229,7 @@ class ContentMapperTest extends SuluTestCase
 
         // save with state PUBLISHED
         $data2 = array(
+            'url' => '/url1',
             'title' => 't2'
         );
         $data2 = $this->mapper->save($data2, 'overview', 'sulu_io', 'de', 1, true, null, null, 2);
@@ -1740,12 +1731,12 @@ class ContentMapperTest extends SuluTestCase
             'url' => '/test',
             'block1' => array(
                 array(
-                    'type' => 'sulu_io',
+                    'type' => 'default',
                     'title' => 'Block-name-1',
                     'article' => 'Block-Article-1'
                 ),
                 array(
-                    'type' => 'sulu_io',
+                    'type' => 'default',
                     'title' => 'Block-name-2',
                     'article' => 'Block-Article-2'
                 )
@@ -1802,21 +1793,21 @@ class ContentMapperTest extends SuluTestCase
         );
 
         // update content
-        $structureDe = $this->mapper->save($dataDe, 'sulu_io', 'sulu_io', 'de', 1);
+        $structureDe = $this->mapper->save($dataDe, 'default', 'sulu_io', 'de', 1);
 
         $dataEn = array(
             'title' => 'Testname-EN',
             'blog' => 'English'
         );
-        $structureEn = $this->mapper->save($dataEn, 'sulu_io', 'sulu_io', 'en', 1, true, $structureDe->getUuid());
+        $structureEn = $this->mapper->save($dataEn, 'default', 'sulu_io', 'en', 1, true, $structureDe->getUuid())->toArray();
         $structureDe = $this->mapper->load($structureDe->getUuid(), 'sulu_io', 'de');
 
         // check data
-        $this->assertNotEquals($structureDe->getPropertyValue('title'), $structureEn->getPropertyValue('title'));
-        $this->assertEquals($structureDe->getPropertyValue('blog'), $structureEn->getPropertyValue('blog'));
+        $this->assertNotEquals($structureDe->getPropertyValue('title'), $structureEn['title']);
+        $this->assertEquals($structureDe->getPropertyValue('blog'), $structureEn['blog']);
 
-        $this->assertEquals($dataEn['title'], $structureEn->getPropertyValue('title'));
-        $this->assertEquals($dataEn['blog'], $structureEn->getPropertyValue('blog'));
+        $this->assertEquals($dataEn['title'], $structureEn['title']);
+        $this->assertEquals($dataEn['blog'], $structureEn['blog']);
 
         $this->assertEquals($dataDe['title'], $structureDe->getPropertyValue('title'));
         // En has overritten german content
@@ -1961,7 +1952,7 @@ class ContentMapperTest extends SuluTestCase
         $result = array();
         foreach ($data as $item) {
             $itemStructure = $this->mapper->save($item['data'], 'overview', 'sulu_io', 'de', 1, true, null, $uuid);
-            $itemStructure->setChildren($this->saveData($item['children'], $itemStructure->getUuid()));
+            $this->saveData($item['children'], $itemStructure->getUuid());
 
             $result[] = $itemStructure;
         }
@@ -2070,7 +2061,7 @@ class ContentMapperTest extends SuluTestCase
 
         // layer 1
         $layer1 = $result[1]->getChildren();
-        $this->assertEquals(0, sizeof($result[0]->getChildren()));
+        $this->assertEquals(1, sizeof($result[0]->getChildren()));
         $this->assertEquals('Products', $result[0]->title);
         $this->assertTrue($result[0]->getHasChildren());
 
@@ -2175,7 +2166,7 @@ class ContentMapperTest extends SuluTestCase
             )
         );
 
-        $structure = $structure = $this->mapper->save($data, 'extension', 'sulu_io', 'en', 1);
+        $structure = $structure = $this->mapper->save($data, 'default', 'sulu_io', 'en', 1);
         $result = $structure->toArray();
 
         $this->assertEquals(1, $result['creator']);
@@ -2204,7 +2195,7 @@ class ContentMapperTest extends SuluTestCase
 
         $structure = $this->mapper->save(
             $data,
-            'extension',
+            'default',
             'sulu_io',
             'en',
             1,
@@ -2260,7 +2251,7 @@ class ContentMapperTest extends SuluTestCase
         $data = array(
             'title' => 'Test',
             'url' => '/test/test',
-            'blog' => 'Thats a good test',
+            'article' => 'Thats a good test',
             'ext' => array(
                 'test1' => array(
                     'a' => 'That´s a test',
@@ -2273,7 +2264,7 @@ class ContentMapperTest extends SuluTestCase
             )
         );
 
-        $structure = $structure = $this->mapper->save($data, 'extension', 'sulu_io', 'en', 1);
+        $structure = $structure = $this->mapper->save($data, 'default', 'sulu_io', 'en', 1);
         $result = $structure->toArray();
 
         $this->assertEquals(1, $result['creator']);
@@ -2298,7 +2289,7 @@ class ContentMapperTest extends SuluTestCase
         $data = array(
             'title' => 'Test',
             'url' => '/test/test',
-            'blog' => 'Das ist ein guter Test',
+            'article' => 'Das ist ein guter Test',
             'ext' => array(
                 'test1' => array(
                     'a' => 'Das ist ein Test',
@@ -2313,7 +2304,7 @@ class ContentMapperTest extends SuluTestCase
 
         $structure = $structure = $this->mapper->save(
             $data,
-            'extension',
+            'default',
             'sulu_io',
             'de',
             1,
@@ -2343,7 +2334,7 @@ class ContentMapperTest extends SuluTestCase
 
         $resultDE = $this->mapper->load($structure->getUuid(), 'sulu_io', 'de')->toArray();
         $this->assertEquals('Test', $resultDE['title']);
-        $this->assertEquals('Das ist ein guter Test', $resultDE['blog']);
+        $this->assertEquals('Das ist ein guter Test', $resultDE['article']);
         $this->assertEquals(
             array(
                 'a' => 'Das ist ein Test',
@@ -2361,7 +2352,7 @@ class ContentMapperTest extends SuluTestCase
 
         $resultEN = $this->mapper->load($structure->getUuid(), 'sulu_io', 'en')->toArray();
         $this->assertEquals('Test', $resultEN['title']);
-        $this->assertEquals('Thats a good test', $resultEN['blog']);
+        $this->assertEquals('Thats a good test', $resultEN['article']);
         $this->assertEquals(
             array(
                 'a' => 'That´s a test',
@@ -2386,7 +2377,7 @@ class ContentMapperTest extends SuluTestCase
             'blog' => 'Thats a good test'
         );
 
-        $structure = $this->mapper->save($data, 'extension', 'sulu_io', 'en', 1);
+        $structure = $this->mapper->save($data, 'default', 'sulu_io', 'en', 1);
         $result = $structure->toArray();
 
         $this->assertEquals('/test', $result['path']);
@@ -2462,7 +2453,7 @@ class ContentMapperTest extends SuluTestCase
             'blog' => 'Das ist ein guter Test'
         );
 
-        $structure = $this->mapper->save($data, 'extension', 'sulu_io', 'de', 1, true, $structure->getUuid());
+        $structure = $this->mapper->save($data, 'default', 'sulu_io', 'de', 1, true, $structure->getUuid());
         $result = $structure->toArray();
 
         $this->assertEquals('/test', $result['path']);
@@ -2512,7 +2503,7 @@ class ContentMapperTest extends SuluTestCase
             'blog' => 'Thats a good test'
         );
 
-        $structure = $this->mapper->save($data, 'extension', 'sulu_io', 'en', 1);
+        $structure = $this->mapper->save($data, 'default', 'sulu_io', 'en', 1);
         $dataTest2DE = array(
             'a' => 'de test2 a',
             'b' => 'de test2 b'
@@ -2533,7 +2524,7 @@ class ContentMapperTest extends SuluTestCase
             'url' => '/test/test',
             'blog' => 'Thats a good test'
         );
-        $structure1 = $this->mapper->save($data1, 'extension', 'sulu_io', 'en', 1);
+        $structure1 = $this->mapper->save($data1, 'default', 'sulu_io', 'en', 1);
 
         $data2 = array(
             'title' => 'Test',
