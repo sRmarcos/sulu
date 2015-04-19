@@ -2250,7 +2250,7 @@ class ContentMapperTest extends SuluTestCase
         $data = array(
             'title' => 'Test',
             'url' => '/test/test',
-            'article' => 'Thats a good test',
+            'localized_blog' => 'Thats a good test',
             'ext' => array(
                 'test1' => array(
                     'a' => 'That´s a test',
@@ -2288,7 +2288,7 @@ class ContentMapperTest extends SuluTestCase
         $data = array(
             'title' => 'Test',
             'url' => '/test/test',
-            'article' => 'Das ist ein guter Test',
+            'localized_blog' => 'Das ist ein guter Test',
             'ext' => array(
                 'test1' => array(
                     'a' => 'Das ist ein Test',
@@ -2333,7 +2333,7 @@ class ContentMapperTest extends SuluTestCase
 
         $resultDE = $this->mapper->load($structure->getUuid(), 'sulu_io', 'de')->toArray();
         $this->assertEquals('Test', $resultDE['title']);
-        $this->assertEquals('Das ist ein guter Test', $resultDE['article']);
+        $this->assertEquals('Das ist ein guter Test', $resultDE['localized_blog']);
         $this->assertEquals(
             array(
                 'a' => 'Das ist ein Test',
@@ -2351,7 +2351,7 @@ class ContentMapperTest extends SuluTestCase
 
         $resultEN = $this->mapper->load($structure->getUuid(), 'sulu_io', 'en')->toArray();
         $this->assertEquals('Test', $resultEN['title']);
-        $this->assertEquals('Thats a good test', $resultEN['article']);
+        $this->assertEquals('Thats a good test', $resultEN['localized_blog']);
         $this->assertEquals(
             array(
                 'a' => 'That´s a test',
