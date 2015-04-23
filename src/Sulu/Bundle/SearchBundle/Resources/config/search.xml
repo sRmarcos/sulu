@@ -4,24 +4,15 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="sulu_search.event_subscriber.content_mapper.class">Sulu\Bundle\SearchBundle\EventListener\ContentMapperSubscriber</parameter>
-        <parameter key="sulu_search.event_listener.search.class">Sulu\Bundle\SearchBundle\EventListener\SearchListener</parameter>
+        <parameter key="sulu_search.event_subscriber.content.class">Sulu\Bundle\SearchBundle\EventListener\ContentSubscriber</parameter>
     </parameters>
 
     <services>
-        <!-- node save event listener -->
-        <service id="sulu_search.event_subscriber.content_mapper" class="%sulu_search.event_subscriber.content_mapper.class%">
+        <service id="sulu_search.event_subscriber.content" class="%sulu_search.event_subscriber.content.class%">
             <argument type="service" id="massive_search.search_manager" />
-            <argument type="service" id="sulu.phpcr.session" />
-
+            <argument type="service" id="sulu_document_manager.metadata_factory" />
+            <argument type="service" id="sulu_content.document.content_instance_factory" />
             <tag name="kernel.event_subscriber" />
-        </service>
-
-        <!-- search event to be sure that all structures are loaded (generated) -->
-        <service id="sulu_search.event_listener.search" class="%sulu_search.event_listener.search.class%">
-            <argument type="service" id="sulu.content.structure_manager" />
-
-            <tag name="kernel.event_listener" event="massive_search.search" method="onSearch" />
         </service>
     </services>
 </container>

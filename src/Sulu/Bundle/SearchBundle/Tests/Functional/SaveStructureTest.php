@@ -15,6 +15,8 @@ use Sulu\Component\Content\Compat\StructureInterface;
 use Sulu\Component\Content\Compat\PropertyTag;
 use Sulu\Component\Content\Compat\Structure;
 use Sulu\Component\Content\Mapper\ContentMapperRequest;
+use Sulu\Bundle\ContentBundle\Document\PageDocument;
+use Sulu\Component\Content\Document\WorkflowStage;
 
 class SaveStructureTest extends BaseTestCase
 {
@@ -34,18 +36,16 @@ class SaveStructureTest extends BaseTestCase
         $this->assertEquals('About Us', $document->getTitle());
         $this->assertEquals('/about-us', $document->getUrl());
         $this->assertEquals(null, $document->getDescription());
-
-        // ensure metadataload listener was called
-        $metadataListener = $this->getContainer()->get('structure_metadata_load_listener');
-        $this->assertInstanceOf('Sulu\Component\Content\Compat\StructureInterface', $metadataListener->structure);
-        $this->assertInstanceOf('Massive\Bundle\SearchBundle\Search\Metadata\IndexMetadata', $metadataListener->indexMetadata);
     }
 
     public function testSaveStructureWithBlocks()
     {
-        $mapper = $this->getContainer()->get('sulu.content.mapper');
-
-        $data = array(
+        $document = new PageDocument();
+        $document->setTitle('Hello');
+        $document->setStructureType('blocks');
+        $document->setResourceSegment('/places');
+        $document->setWorkflowStage(WorkflowStage::PUBLISHED);
+        $document->getContent()->bind(array(
             'title' => 'Places',
             'url' => '/places',
             'block' => array(
@@ -59,21 +59,11 @@ class SaveStructureTest extends BaseTestCase
                     'title' => 'Basel',
                     'article' => 'Basel Switzerland',
                 ),
-            ),
-        );
+            )), false);
+        $document->setParent($this->webspaceDocument);
 
-        $request = ContentMapperRequest::create()
-            ->setData($data)
-            ->setTemplateKey('blocks')
-            ->setWebspaceKey('sulu_io')
-            ->setLocale('de')
-            ->setUserId(1)
-            ->setPartialUpdate(true)
-            ->setUuid(null)
-            ->setParentUuid(null)
-            ->setState(Structure::STATE_PUBLISHED);
-
-        $mapper->saveRequest($request);
+        $this->documentManager->persist($document, 'de');
+        $this->documentManager->flush();
 
         $searchManager = $this->getSearchManager();
 
@@ -87,35 +77,5 @@ class SaveStructureTest extends BaseTestCase
             $res = $searchManager->createSearch($search)->locale('de')->index('content')->execute();
             $this->assertCount($count, $res, 'Searching for: ' . $search);
         }
-    }
-
-    /**
-     * Test that the tagged "description" field is indexed.
-     */
-    public function testSaveSecondStructure()
-    {
-        $searchManager = $this->getSearchManager();
-
-        $structure = new SecondStructureCache();
-        $structure->setUuid(123);
-        $structure->getProperty('title')->setValue('This is a title Giraffe');
-        $articleProperty = $structure->getProperty('article');
-        $articleProperty->setValue('out with colleagues. Following a highly publicised appeal for information on her');
-        $articleProperty->addTag(new PropertyTag('sulu.search.field', array()));
-        $structure->getProperty('url')->setValue('/this/is/a/url');
-        $structure->getProperty('images')->setValue(array('asd'));
-        $structure->setLanguageCode('de');
-        $structure->setNodeState(StructureInterface::STATE_PUBLISHED);
-
-        $searchManager->index($structure);
-
-        $res = $searchManager->createSearch('Giraffe')->locale('de')->index('content')->execute();
-        $this->assertCount(1, $res);
-
-        $structure->getProperty('title')->setValue('Pen and Paper');
-        $searchManager->index($structure);
-
-        // $res = $searchManager->createSearch('Pen')->locale('de')->index('content')->execute();
-        // $this->assertCount(1, $res);
     }
 }

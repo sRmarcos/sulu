@@ -16,10 +16,15 @@ class SearchManagerTest extends BaseTestCase
     {
         $nbResults = 10;
 
+        $documents = $this->generateStructureIndex(10);
+
         // ensure that we do not create new documents for existing IDs
         for ($i = 1; $i <= 2; $i++) {
+            foreach ($documents as $document) {
+                $this->documentManager->persist($document, 'de');
+            }
+            $this->documentManager->flush();
 
-            $this->generateStructureIndex($nbResults);
             $res = $this->getSearchManager()->createSearch('Structure')->locale('de')->index('content')->execute();
 
             $this->assertCount($nbResults, $res);
