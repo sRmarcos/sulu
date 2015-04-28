@@ -11,6 +11,7 @@
 namespace Sulu\Component\Content\Template;
 
 use InvalidArgumentException;
+use Sulu\Component\Content\Structure;
 
 class TemplateReaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -1095,7 +1096,7 @@ class TemplateReaderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testWithoutRlpTag()
+    public function testWithoutRlpTagTypePage()
     {
         $this->setExpectedException(
             '\Sulu\Component\Content\Template\Exception\RequiredTagNotFoundException',
@@ -1105,6 +1106,37 @@ class TemplateReaderTest extends \PHPUnit_Framework_TestCase
         $templateReader = new TemplateReader();
         $result = $templateReader->load(
             __DIR__ . '/../../../../Resources/DataFixtures/Page/template_missing_rlp_tag.xml'
+        );
+    }
+
+    public function testWithoutRlpTagTypeSnippet()
+    {
+        $templateReader = new TemplateReader();
+        $result = $templateReader->load(
+            __DIR__ . '/../../../../Resources/DataFixtures/Page/template_missing_rlp_tag.xml',
+            Structure::TYPE_SNIPPET
+        );
+
+        $this->assertEquals(
+            array(
+                'key' => 'template',
+                'properties' => array(
+                    'title' => array(
+                        'name' => 'title',
+                        'type' => 'text_line',
+                        'minOccurs' => null,
+                        'maxOccurs' => null,
+                        'colspan' => null,
+                        'cssClass' => null,
+                        'mandatory' => false,
+                        'multilingual' => true,
+                        'tags' => array(),
+                        'params' => array(),
+                        'meta' => array(),
+                    )
+                )
+            ),
+            $result
         );
     }
 
