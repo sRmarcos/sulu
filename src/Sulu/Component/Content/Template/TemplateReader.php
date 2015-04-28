@@ -11,14 +11,15 @@
 namespace Sulu\Component\Content\Template;
 
 use Exception;
+use Sulu\Component\Content\Structure;
+use Sulu\Component\Content\Template\Exception\InvalidXmlException;
 use Sulu\Component\Content\Template\Exception\RequiredPropertyNameNotFoundException;
+use Sulu\Component\Content\Template\Exception\RequiredTagNotFoundException;
 use Sulu\Component\Content\Template\Exception\ReservedPropertyNameException;
 use Sulu\Exception\FeatureNotImplementedException;
-use Sulu\Component\Content\Template\Exception\InvalidXmlException;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\Config\Util\XmlUtils;
-use Sulu\Component\Content\Structure;
 
 /**
  * reads a template xml and returns a array representation
@@ -34,6 +35,15 @@ class TemplateReader implements LoaderInterface
      */
     private $requiredPropertyNames = array(
         'title'
+    );
+
+    /**
+     * tags that are required in template
+     * TODO should be possible to inject from config
+     * @var array
+     */
+    private $requiredTagNames = array(
+        'sulu.rlp'
     );
 
     /**
@@ -96,6 +106,13 @@ class TemplateReader implements LoaderInterface
 
             if (!$requiredPropertyNameFound) {
                 throw new RequiredPropertyNameNotFoundException($result['key'], $requiredPropertyName);
+            }
+        }
+
+        $tagNames = array_keys($tags);
+        foreach ($this->requiredTagNames as $requiredTagName) {
+            if (!in_array($requiredTagName, $tagNames)) {
+                throw new RequiredTagNotFoundException($result['key'], $requiredTagName);
             }
         }
 

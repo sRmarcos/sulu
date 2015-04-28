@@ -89,7 +89,7 @@ class TemplateReaderTest extends \PHPUnit_Framework_TestCase
                     'multilingual' => true,
                     'tags' => array(
                         array(
-                            'name' => 'sulu.rlp.part',
+                            'name' => 'sulu.rlp',
                             'priority' => 1,
                             'attributes' => array(),
                         ),
@@ -212,9 +212,28 @@ class TemplateReaderTest extends \PHPUnit_Framework_TestCase
                             'multilingual' => true,
                             'tags' => array(),
                             'params' => array(),
-                            'meta' => array()
+                            'meta' => array(),
                         ),
-                    )
+                    ),
+                ),
+                'url' => array(
+                    'name' => 'url',
+                    'type' => 'resource_locator',
+                    'minOccurs' => null,
+                    'maxOccurs' => null,
+                    'colspan' => null,
+                    'cssClass' => null,
+                    'mandatory' => true,
+                    'multilingual' => true,
+                    'tags' => array(
+                        array(
+                            'name' => 'sulu.rlp',
+                            'priority' => 1,
+                            'attributes' => array(),
+                        ),
+                    ),
+                    'params' => array(),
+                    'meta' => array()
                 ),
             )
         );
@@ -308,7 +327,7 @@ class TemplateReaderTest extends \PHPUnit_Framework_TestCase
                     'multilingual' => true,
                     'tags' => array(
                         array(
-                            'name' => 'sulu.rlp.part',
+                            'name' => 'sulu.rlp',
                             'priority' => 1,
                             'attributes' => array(),
                         )
@@ -591,7 +610,7 @@ class TemplateReaderTest extends \PHPUnit_Framework_TestCase
                     'multilingual' => true,
                     'tags' => array(
                         array(
-                            'name' => 'sulu.rlp.part',
+                            'name' => 'sulu.rlp',
                             'priority' => 1,
                             'attributes' => array(),
                         )
@@ -795,7 +814,7 @@ class TemplateReaderTest extends \PHPUnit_Framework_TestCase
                             'tags' => array(
                                 '0' => array
                                 (
-                                    'name' => 'sulu.rlp.part',
+                                    'name' => 'sulu.rlp',
                                     'priority' => 1,
                                     'attributes' => array(),
                                 )
@@ -970,7 +989,26 @@ class TemplateReaderTest extends \PHPUnit_Framework_TestCase
                         )
                     ),
                     'meta' => array(),
-                )
+                ),
+                'url' => array(
+                    'name' => 'url',
+                    'type' => 'resource_locator',
+                    'minOccurs' => null,
+                    'maxOccurs' => null,
+                    'colspan' => null,
+                    'cssClass' => null,
+                    'mandatory' => true,
+                    'multilingual' => true,
+                    'tags' => array(
+                        array(
+                            'name' => 'sulu.rlp',
+                            'priority' => 1,
+                            'attributes' => array(),
+                        ),
+                    ),
+                    'params' => array(),
+                    'meta' => array()
+                ),
             )
         );
 
@@ -1013,7 +1051,26 @@ class TemplateReaderTest extends \PHPUnit_Framework_TestCase
                         ),
                     ),
                     'meta' => array(),
-                )
+                ),
+                'url' => array(
+                    'name' => 'url',
+                    'type' => 'resource_locator',
+                    'minOccurs' => null,
+                    'maxOccurs' => null,
+                    'colspan' => null,
+                    'cssClass' => null,
+                    'mandatory' => true,
+                    'multilingual' => true,
+                    'tags' => array(
+                        array(
+                            'name' => 'sulu.rlp',
+                            'priority' => 1,
+                            'attributes' => array(),
+                        ),
+                    ),
+                    'params' => array(),
+                    'meta' => array()
+                ),
             )
         );
 
@@ -1035,6 +1092,19 @@ class TemplateReaderTest extends \PHPUnit_Framework_TestCase
         $templateReader = new TemplateReader();
         $result = $templateReader->load(
             __DIR__ . '/../../../../Resources/DataFixtures/Page/template_missing_title.xml'
+        );
+    }
+
+    public function testWithoutRlpTag()
+    {
+        $this->setExpectedException(
+            '\Sulu\Component\Content\Template\Exception\RequiredTagNotFoundException',
+            'The tag with the name "sulu.rlp" is required, but was not found in the template "template"'
+        );
+
+        $templateReader = new TemplateReader();
+        $result = $templateReader->load(
+            __DIR__ . '/../../../../Resources/DataFixtures/Page/template_missing_rlp_tag.xml'
         );
     }
 
