@@ -20,6 +20,10 @@ To be sure that it is possible to generate a preview image you should check if t
 {% endif %}
 ```
 
+### Page-Templates
+
+The tag `sulu.rlp` is now mandatory for page templates.
+
 ## 0.17.0
 
 ### Media
