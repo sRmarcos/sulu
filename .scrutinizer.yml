@@ -3,3 +3,8 @@ imports:
 
 filter:
     excluded_paths: [tests/*, src/Sulu/Bundle/*/Tests/*]
+
+tools:
+    external_code_coverage:
+        timeout: 7200
+        runs: 18

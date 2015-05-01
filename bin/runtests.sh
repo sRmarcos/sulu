@@ -68,7 +68,7 @@ header "Sulu CMF Test Suite"
 comment "ORM: "$SULU_ORM
 comment "PHPCR: "$SULU_PHPCR
 
-while getopts ":ait:" OPT; do
+while getopts ":aitc:" OPT; do
     case $OPT in
         i)
             init_database
@@ -77,6 +77,9 @@ while getopts ":ait:" OPT; do
             BUNDLE=$OPTARG
             ;;
         a)
+            ;;
+        c)
+            wget https://scrutinizer-ci.com/ocular.phar
             ;;
     esac
 done
@@ -130,7 +133,15 @@ for BUNDLE in $BUNDLES; do
     cd -
     comment "Running tests"
 
-    phpunit --configuration phpunit.travis.xml.dist $BUNDLE_DIR/Tests
+    phpunit --configuration phpunit.travis.xml.dist --coverage-clover=coverage.clover $BUNDLE_DIR/Tests
+
+    while getopts ":c:" OPT; do
+        case $OPT in
+            c)
+                php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+                ;;
+        esac
+    done
 
     if [ $? -ne 0 ]; then
         echo $BUNDLE_NAME >> /tmp/failed.tests
