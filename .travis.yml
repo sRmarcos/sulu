@@ -18,7 +18,10 @@ before_script:
 
 script: 
   - time ./bin/runtests.sh -c -i -a
-  - phpunit
+  - phpunit --coverage-clover=coverage.clover
+
+after_script:
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
 
 matrix:
   allow_failures:
