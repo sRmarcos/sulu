@@ -68,7 +68,7 @@ header "Sulu CMF Test Suite"
 comment "ORM: "$SULU_ORM
 comment "PHPCR: "$SULU_PHPCR
 
-while getopts ":aitc:" OPT; do
+while getopts ":a:i:t:c" OPT; do
     case $OPT in
         i)
             init_database
