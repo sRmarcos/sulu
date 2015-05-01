@@ -15,9 +15,10 @@ before_script:
   - composer install
   - ./bin/jackrabbit.sh
   - php bin/jackrabbit.php
+  - wget https://scrutinizer-ci.com/ocular.phar
 
 script: 
-  - time ./bin/runtests.sh -c -i -a
+  - time ./bin/runtests.sh -i -a
   - phpunit --coverage-clover=coverage.clover
 
 after_script:
