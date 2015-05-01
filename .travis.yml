@@ -17,7 +17,7 @@ before_script:
   - php bin/jackrabbit.php
 
 script: 
-  - time ./bin/runtests.sh -i -a -c
+  - time ./bin/runtests.sh -c -i -a
   - phpunit
 
 matrix:

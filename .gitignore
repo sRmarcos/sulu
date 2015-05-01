@@ -28,3 +28,6 @@ phpunit.xml
 # phpunit
 /phpunit.xml
 
+# code coverage
+coverage.clover
+ocular.phar
