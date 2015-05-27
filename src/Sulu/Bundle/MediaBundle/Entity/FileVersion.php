@@ -44,6 +44,11 @@ class FileVersion implements AuditableInterface
     private $storageOptions;
 
     /**
+     * @var string
+     */
+    private $storageType;
+
+    /**
      * @var int
      */
     private $downloadCounter = 0;
@@ -583,5 +588,28 @@ class FileVersion implements AuditableInterface
                 $this->addPublishLanguage($newPublishLanguage);
             }
         }
+    }
+
+    /**
+     * Set storageType
+     *
+     * @param string $storageType
+     * @return FileVersion
+     */
+    public function setStorageType($storageType)
+    {
+        $this->storageType = $storageType;
+
+        return $this;
+    }
+
+    /**
+     * Get storageType
+     *
+     * @return string 
+     */
+    public function getStorageType()
+    {
+        return $this->storageType;
     }
 }
