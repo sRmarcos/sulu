@@ -25,6 +25,7 @@
         "liip/theme-bundle": "1.1.*",
         "massive/search-bundle": "~1.0@dev",
         "php": ">=5.5",
+        "ext-fileinfo": "*",
         "sensio/framework-extra-bundle": "3.0.*",
         "stof/doctrine-extensions-bundle": "1.1.*",
         "symfony-cmf/routing-bundle": "1.2.*",
