@@ -22,7 +22,7 @@ use Massive\Bundle\SearchBundle\Search\Metadata\IndexMetadata;
 use Metadata\Driver\AdvancedDriverInterface;
 use Massive\Bundle\SearchBundle\Search\Field;
 use Sulu\Component\Content\Compat\StructureManagerInterface;
-use Sulu\Component\Content\Document\Behavior\ContentBehavior;
+use Sulu\Component\Content\Document\Behavior\StructureBehavior;
 use Sulu\Component\DocumentManager\Metadata\MetadataFactory;
 use Sulu\Component\Content\Structure\Factory\StructureFactory;
 use Sulu\Component\Content\Structure\Block;
@@ -91,7 +91,7 @@ class StructureProvider implements ProviderInterface
      */
     public function getMetadataForObject($object)
     {
-        if (!$object instanceof ContentBehavior) {
+        if (!$object instanceof StructureBehavior) {
             return;
         }
 

@@ -24,7 +24,7 @@ use Sulu\Component\Content\Structure\Property as NewProperty;
 use Sulu\Component\Content\Structure\Section;
 use Sulu\Component\Content\Structure\Structure;
 use Sulu\Bundle\DocumentManagerBundle\Bridge\DocumentInspector;
-use Sulu\Component\Content\Document\Behavior\ContentBehavior;
+use Sulu\Component\Content\Document\Behavior\StructureBehavior;
 use Sulu\Component\Content\Structure\Block;
 use Sulu\Component\Content\Document\Behavior\ExtensionBehavior;
 use Sulu\Component\Content\Document\Behavior\ResourceSegmentBehavior;
@@ -84,7 +84,7 @@ class StructureBridge implements StructureInterface
     /**
      * @param ContentDocumentInterface $document
      */
-    public function setDocument(ContentBehavior $document)
+    public function setDocument(StructureBehavior $document)
     {
         $this->document = $document;
     }
@@ -652,7 +652,7 @@ class StructureBridge implements StructureInterface
         return $this->document;
     }
 
-    protected function documentToStructure(ContentBehavior $document)
+    protected function documentToStructure(StructureBehavior $document)
     {
         return new $this($this->inspector->getStructure($document), $this->inspector, $this->propertyFactory, $document);
     }
