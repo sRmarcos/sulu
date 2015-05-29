@@ -25,7 +25,7 @@ use Sulu\Bundle\MediaBundle\Media\Exception\MediaException;
 use Sulu\Bundle\MediaBundle\Media\FormatCache\FormatCacheInterface;
 use Sulu\Bundle\MediaBundle\Media\ImageConverter\ImageConverterInterface;
 use Sulu\Bundle\MediaBundle\Media\Storage\StorageInterface;
-use \Symfony\Component\HttpFoundation\File\File as SymfoneFile;
+use \Symfony\Component\HttpFoundation\File\File as SymfonyFile;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -331,7 +331,7 @@ class FormatManager implements FormatManagerInterface
 
         exec($command);
 
-        $file = new SymfoneFile($path);
+        $file = new SymfonyFile($path);
 
         if ($file->getMimeType() == 'application/pdf') {
             throw new GhostScriptNotFoundException(
